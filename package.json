@@ -1,10 +1,8 @@
 {
   "name": "nextjs-typescript-quickstart",
   "version": "1.0.0",
-  "description": "Get started on Next.js with TypeScript in seconds.",
+  "description": "Next.js with TypeScript test",
   "main": "N/A",
-  "repository": "https://github.com/resir014/nextjs-typescript-quickstart",
-  "author": "Resi Respati <resir014@gmail.com>",
   "license": "Unlicense",
   "private": true,
   "scripts": {

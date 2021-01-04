@@ -1,36 +1,28 @@
-import * as React from 'react'
 import { NextPage } from 'next'
-import Link from 'next/link'
 
-import Page from '~/components/Page'
-import PageHeader from '~/components/PageHeader'
-import PageBody from '~/components/PageBody'
-import Navigation from '~/components/Navigation'
-import Content from '~/components/Content'
-import relativeTime from '~/utils/relativeTime'
+import Page from '~/components/Page/Page'
+import PageHeader from '~/components/PageHeader/PageHeader'
+import PageBody from '~/components/PageBody/PageBody'
+import Navigation from '~/components/Navigation/Navigation'
+import Content from '~/components/Content/Content'
+import { useContext } from 'react'
+import { GameContext } from '~/components/GameStateContext'
+import Button from '~/components/Button/Button'
 
-const lastUpdated = '2015-01-25T07:25:15+07:00'
-
-const IndexPage: NextPage = () => (
-  <Page>
-    <Navigation />
-    <Content>
-      <PageHeader>Hello world.</PageHeader>
-      <PageBody>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Certe non potest. Negabat igitur ullam esse artem, quae ipsa a se
-          proficisceretur; Duo Reges: constructio interrete. Quid turpius quam sapientis vitam ex insipientium sermone pendere? Non igitur
-          bene. Vide, quaeso, rectumne sit.
-        </p>
-        <p>
-          Last updated: <time dateTime={lastUpdated}>{relativeTime(new Date(lastUpdated))}</time> |{' '}
-          <Link href="/about" passHref>
-            <a>About</a>
-          </Link>
-        </p>
-      </PageBody>
-    </Content>
-  </Page>
-)
-
+const IndexPage: NextPage = () => {
+  const state = useContext(GameContext);
+  return (
+    <Page>
+      <Navigation />
+      <Content>
+        <PageHeader>Hello world.</PageHeader>
+        <PageBody>
+          State: {JSON.stringify(state)}
+        </PageBody>
+        <Button style={{ marginLeft: "2rem" }} cb={state.inc}>¤</Button>
+        {/* todo: refactor how Content, PageBody so I don't need marginLeft evrywher. */}
+      </Content>
+    </Page>
+  )
+};
 export default IndexPage

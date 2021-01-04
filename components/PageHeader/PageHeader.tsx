@@ -1,8 +1,7 @@
-import * as React from 'react'
-
+import { FC } from 'react'
 import styles from './PageHeader.module.css'
 
-const PageHeader: React.FC = ({ children }) => {
+const PageHeader: FC = ({ children }) => {
   return (
     <header className={styles.root}>
       <h1 className={styles.title}>{children}</h1>

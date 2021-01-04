@@ -1,11 +1,11 @@
-import * as React from 'react'
 import Link from 'next/link'
+import { FC } from 'react'
 
 import styles from './Navigation.module.css'
 
-const Navigation: React.FC = () => (
+const Navigation: FC = () => (
   <header className={styles.root}>
-    <div className={styles.left}>▲</div>
+    <div className={styles.currLogo}>¤</div>
     <nav className={styles.right}>
       <Link href="/">
         <a>Home</a>

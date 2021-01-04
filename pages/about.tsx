@@ -1,12 +1,11 @@
-import * as React from 'react'
 import { NextPage } from 'next'
 import Link from 'next/link'
 
-import Page from '~/components/Page'
-import PageHeader from '~/components/PageHeader'
-import PageBody from '~/components/PageBody'
-import Navigation from '~/components/Navigation'
-import Content from '~/components/Content'
+import Page from '~/components/Page/Page'
+import PageHeader from '~/components/PageHeader/PageHeader'
+import PageBody from '~/components/PageBody/PageBody'
+import Navigation from '~/components/Navigation/Navigation'
+import Content from '~/components/Content/Content'
 import relativeTime from '~/utils/relativeTime'
 
 const lastUpdated = '2018-09-25T19:30:01+07:00'
