@@ -1,8 +1,7 @@
-import { AppProps } from 'next/app'
-import Head from 'next/head'
-
-import 'modern-normalize'
-import { GameContext, InitialGameState } from '~/components/GameStateContext'
+import { AppProps } from "next/app";
+import Head from "next/head";
+import "modern-normalize";
+import { GameStateProvider } from "~/components/GameState/GameContext";
 
 export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   return (
@@ -11,9 +10,9 @@ export default function MyApp({ Component, pageProps }: AppProps): JSX.Element {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Next.js TypeScript Quickstart</title>
       </Head>
-      <GameContext.Provider value={InitialGameState}>
+      <GameStateProvider>
         <Component {...pageProps} />
-      </GameContext.Provider>
+      </GameStateProvider>
     </>
-  )
+  );
 }

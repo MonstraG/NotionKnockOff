@@ -3,8 +3,8 @@ import styles from "./Button.module.css"
 
 
 type Props = {
-  style?: CSSProperties
-  cb?: () => void
+  style?: CSSProperties;
+  cb?: () => void;
 }
 
 const Button: FC<Props> = ({ children, style, cb }) => {
