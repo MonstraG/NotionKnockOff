@@ -1,0 +1,37 @@
+.block {
+  background-color: gray;
+}
+
+.crack {
+  position: absolute;
+}
+
+.block .crack {
+  background-color: black;
+}
+
+.block,
+.block .crack {
+  width: 32px;
+  height: 32px;
+}
+
+.falling {
+  position: absolute;
+  transform: translateY(200vh);
+  transition-duration: 1.2s;
+  transition-timing-function: ease-in;
+}
+
+.block .c1 {
+  clip-path: polygon(50% 50%, 80% 100%, 90% 100%);
+}
+.block .c2 {
+  clip-path: polygon(75% 2%, 75% 20%, 50% 50%);
+}
+.block .c3 {
+  clip-path: polygon(0% 0%, 50% 50%, 23% 35%);
+}
+.block .c4 {
+  clip-path: polygon(0% 82%, 0% 77%, 50% 50%, 100% 20%, 100% 25%)
+}
