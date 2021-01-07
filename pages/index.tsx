@@ -12,6 +12,9 @@ const IndexPage: NextPage = () => {
   const { state, setState } = useGameState();
   const incMoney = () => setState((s: GameState) => ({ ...s, money: s.money + 1 }))
 
+  //todo: refactor how Content, PageBody so I don't need marginLeft evrywher?????
+
+  //todo: css -> scss
 
   return (
     <Page>
@@ -24,8 +27,7 @@ const IndexPage: NextPage = () => {
           ¤
         </Button>
         */}
-        <Block style={{ margin: "2rem" }} onBreak={incMoney} />
-        {/* todo: refactor how Content, PageBody so I don't need marginLeft evrywher. */}
+        <Block style={{ margin: "4rem" }} onBreak={incMoney} />
       </Content>
     </Page>
   );
