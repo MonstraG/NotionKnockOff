@@ -13,6 +13,17 @@ const Block: FC<Props & Style> = ({ style, onBreak }) => {
   const [state, setState] = useState<number>(0);
   const breakMore = () => setState((s) => Math.min(s + 1, 5));
 
+
+  const [t, st] = useState(0)
+
+  const ont = () => {
+  	const now = new Date().getTime();
+  	if (Math.abs(now - t) > 20) {
+  		breakMore()
+  		st(t)
+  	}
+  }
+  
   useEffect(() => {
     if (isBroken(state)) {
       onBreak();
@@ -24,7 +35,8 @@ const Block: FC<Props & Style> = ({ style, onBreak }) => {
 
   return (
     <div style={style} className={`${styles.container} ${isBroken(state) && styles.broken}`}>
-      <div className={styles.block} onClick={breakMore}>
+      <div className={styles.block} 
+      onPointerDown={ont}>
         <div className={`${styles.crack} ${styles.c1}`} style={{ display: crackDisplay(1)(state) }} />
         <div className={`${styles.crack} ${styles.c2}`} style={{ display: crackDisplay(2)(state) }} />
         <div className={`${styles.crack} ${styles.c3}`} style={{ display: crackDisplay(3)(state) }} />

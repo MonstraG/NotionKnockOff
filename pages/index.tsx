@@ -6,14 +6,37 @@ import Content from "~/components/Content/Content";
 import { useGameState } from "~/components/GameState/GameContext";
 import { GameState } from "~/components/GameState/GameState";
 import Block from "~/components/Block/Block";
+import Button from "~/components/Button/Button";
 
 const IndexPage: NextPage = () => {
   const { state, setState } = useGameState();
-  const incMoney = () => setState((s: GameState) => ({ ...s, money: s.money + 1 }))
+  const incMoney = () => setState((s: GameState) =>
+   ({ ...s, money: s.money + 1 }))
 
   //todo: refactor how Content, PageBody so I don't need marginLeft evrywher?????
 
   //todo: css -> scss
+
+  const buyBlock = () => {
+    if (!canBuy()) return;
+  	setState((s) =>
+  	 ({...s,
+  	 money: s.money - s.blocks,  
+  	 blocks: s.blocks + 1}))
+  }
+
+  const canBuy = () => {
+  	return state.money >= state.blocks;
+  }
+ 
+  const getblocks = () => {
+ return (
+    Array.from(Array(state.blocks)
+    .keys()).map((i) =>
+    (<div><Block onBreak={incMoney} key={i}/></div>)
+  	)
+  	)
+  }
 
   return (
     <Page>
@@ -21,13 +44,18 @@ const IndexPage: NextPage = () => {
       <Content>
         <PageHeader>Hello world.</PageHeader>
         <PageBody>State: {JSON.stringify(state)}</PageBody>
-        {/*
-        <Button style={{ marginLeft: "2rem" }} cb={incMoney}>
+        
+        <Button style={{ marginLeft: "2rem" }} 
+        cb={buyBlock}>
           ¤
         </Button>
-        */}
-        <Block style={{ margin: "4rem" }} onBreak={incMoney} />
-        <Block style={{ margin: "4rem" }} onBreak={incMoney} />
+        
+        <div style={{ display:"flex", 
+        justifyItems: "space-between",
+        marginLeft: "2rem",
+        width: "100%"}}>
+          {getblocks()}
+        </div>
       </Content>
     </Page>
   );
