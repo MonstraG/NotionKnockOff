@@ -27,6 +27,7 @@ const IndexPage: NextPage = () => {
         </Button>
         */}
         <Block style={{ margin: "4rem" }} onBreak={incMoney} />
+        <Block style={{ margin: "4rem" }} onBreak={incMoney} />
       </Content>
     </Page>
   );
