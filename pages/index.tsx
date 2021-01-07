@@ -1,4 +1,3 @@
-import { NextPage } from "next";
 import Page from "~/components/Page/Page";
 import PageHeader from "~/components/PageHeader/PageHeader";
 import PageBody from "~/components/PageBody/PageBody";
