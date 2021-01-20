@@ -1,38 +1,27 @@
 {
-  "name": "nextjs-typescript-quickstart",
+  "name": "test-clickr",
   "version": "1.0.0",
-  "description": "Next.js with TypeScript test",
+  "description": "Test clicker game thingie",
   "main": "N/A",
   "license": "Unlicense",
   "private": true,
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "format": "prettier --write \"./**/*.{ts,tsx}\"",
-    "lint": "eslint \"**/*.{ts,tsx}\" \"*.config.js\"",
-    "now-build": "cross-env BUILD_TARGET=serverless next build",
-    "test": "npm run type-check && npm run lint",
-    "type-check": "tsc --noEmit"
+    "start": "next start"
   },
   "dependencies": {
     "modern-normalize": "^1.0.0",
-    "next": "^10.0.4",
+    "next": "^10.0.5",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "sass": "^1.32.2"
+    "sass": "^1.32.5"
   },
   "devDependencies": {
-    "@types/node": "^14.14.17",
+    "@types/node": "^14.14.22",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/styled-jsx": "^2.2.8",
-    "cross-env": "^7.0.3",
-    "eslint": "7.16.0",
-    "eslint-config-blvd": "^1.1.1",
-    "eslint-config-prettier": "^7.1.0",
-    "eslint-import-resolver-typescript": "^2.3.0",
-    "eslint-plugin-prettier": "^3.3.0",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
   }
