@@ -1,0 +1,7 @@
+.blockRow {
+  display: flex;
+  & > div {
+    margin-right: 2rem;
+  }
+  margin: 2rem;
+}
