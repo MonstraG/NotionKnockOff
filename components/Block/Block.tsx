@@ -20,23 +20,15 @@ const Block: FC<Props & Style> = ({ style, onBreak }) => {
     }
   }, [state]);
 
-  // todo: refactor to use minimum amount of DOM elements ?
-
   const appliedStyles = isBroken(state) ? undefined : style;
 
   return (
     <div style={appliedStyles} className={`${styles.container} ${isBroken(state) && styles.broken}`}>
-      <div className={styles.block} onPointerDown={breakMore}>
-        <div className={`${styles.crack} ${styles.c1}`} style={{ display: crackDisplay(1)(state) }} />
-        <div className={`${styles.crack} ${styles.c2}`} style={{ display: crackDisplay(2)(state) }} />
-        <div className={`${styles.crack} ${styles.c3}`} style={{ display: crackDisplay(3)(state) }} />
-        <div className={`${styles.crack} ${styles.c4}`} style={{ display: crackDisplay(4)(state) }} />
-      </div>
-      <div className={styles.fragments}>
-        <div className={`${styles.fragment} ${styles.f1}`} />
-        <div className={`${styles.fragment} ${styles.f2}`} />
-        <div className={`${styles.fragment} ${styles.f3}`} />
-        <div className={`${styles.fragment} ${styles.f4}`} />
+      <div className={isBroken(state) ? styles.fragmets : styles.block} onPointerDown={breakMore}>
+        <div className={`${styles.part} ${styles.p1}`} style={{ display: crackDisplay(1)(state) }} />
+        <div className={`${styles.part} ${styles.p2}`} style={{ display: crackDisplay(2)(state) }} />
+        <div className={`${styles.part} ${styles.p3}`} style={{ display: crackDisplay(3)(state) }} />
+        <div className={`${styles.part} ${styles.p4}`} style={{ display: crackDisplay(4)(state) }} />
       </div>
     </div>
   )
