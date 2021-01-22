@@ -23,13 +23,11 @@ const Block: FC<Props & Style> = ({ style, onBreak }) => {
   const appliedStyles = isBroken(state) ? undefined : style;
 
   return (
-    <div style={appliedStyles} className={`${styles.container} ${isBroken(state) && styles.broken}`}>
-      <div className={isBroken(state) ? styles.fragmets : styles.block} onPointerDown={breakMore}>
-        <div className={`${styles.part} ${styles.p1}`} style={{ display: crackDisplay(1)(state) }} />
-        <div className={`${styles.part} ${styles.p2}`} style={{ display: crackDisplay(2)(state) }} />
-        <div className={`${styles.part} ${styles.p3}`} style={{ display: crackDisplay(3)(state) }} />
-        <div className={`${styles.part} ${styles.p4}`} style={{ display: crackDisplay(4)(state) }} />
-      </div>
+    <div style={appliedStyles} className={isBroken(state) ? styles.broken : styles.block} onPointerDown={breakMore}>
+      <div className={`${styles.part} ${styles.p1}`} style={{ display: crackDisplay(1)(state) }} />
+      <div className={`${styles.part} ${styles.p2}`} style={{ display: crackDisplay(2)(state) }} />
+      <div className={`${styles.part} ${styles.p3}`} style={{ display: crackDisplay(3)(state) }} />
+      <div className={`${styles.part} ${styles.p4}`} style={{ display: crackDisplay(4)(state) }} />
     </div>
   )
 }
