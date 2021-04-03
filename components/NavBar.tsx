@@ -38,7 +38,7 @@ const NavLink = styled.a`
   cursor: pointer;
 `;
 
-const Navigation: FC = () => (
+const NavBar: FC = () => (
   <Header>
     <Logo>¤</Logo>
     <Nav>
@@ -52,4 +52,4 @@ const Navigation: FC = () => (
   </Header>
 );
 
-export default Navigation;
+export default NavBar;

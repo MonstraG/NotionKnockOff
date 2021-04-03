@@ -1,16 +1,6 @@
-import Page from "~/components/Page";
-import PageHeader from "~/components/PageHeader";
-import Navigation from "~/components/Navigation";
-import Content from "~/components/Content";
 import { NextPage } from "next";
+import Layout from "~/components/Layout";
 
-const IndexPage: NextPage = () => (
-  <Page>
-    <Navigation />
-    <Content>
-      <PageHeader>Hello world.</PageHeader>
-    </Content>
-  </Page>
-);
+const IndexPage: NextPage = () => <Layout>Hello world</Layout>;
 
 export default IndexPage;
