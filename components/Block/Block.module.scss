@@ -1,73 +1,58 @@
-.container {
-  display: inline-block;
-}
-
-.block, .fragment {
-  background-color: gray;
-}
-
-.crack {
-  background-color: black;
-}
-
-.crack, .fragment, .fragments {
-  position: absolute;
-}
-
-.container .block,
-.crack,
-.broken .fragment {
+.container,
+.block,
+.part {
   width: 64px;
   height: 64px;
 }
 
+// when inside block, parts are cracks
+.block .part {
+  background-color: black;
+}
+
+//else they are fragments and gray as block itself
+.block, .part {
+  background-color: gray;
+}
+
+.part {
+  position: absolute;
+  transition: transform 0.6s ease-in;
+}
+
 .block {
-  .crack.c1 {
+  .part.p1 {
     clip-path: polygon(50% 50%, 80% 100%, 90% 100%);
   }
-  .crack.c2 {
+  .part.p2 {
     clip-path: polygon(75% 2%, 75% 20%, 50% 50%);
   }
-  .crack.c3 {
+  .part.p3 {
     clip-path: polygon(0% 0%, 50% 50%, 23% 35%);
   }
-  .crack.c4 {
-    clip-path: polygon(0% 82%, 0% 77%, 50% 50%, 100% 20%, 100% 25%)
+  .part.p4 {
+    clip-path: polygon(0% 82%, 0% 77%, 50% 50%, 100% 30%, 100% 40%, 50% 50%)
   }
 }
 
 .broken {
   transform: translateY(200vh);
-  transition-duration: 1.2s;
-  transition-timing-function: ease-in;
-  .fragment {
-    transition-duration: 0.6s;
-    transition-timing-function: ease-in;
+  transition: transform 1.2s ease-in;
+  .part.p1 {
+    transform: translate(5vh, 5vh) scale(0.9) rotate(20deg);
+    clip-path: polygon(50% 50%, 80% 100%, 100% 100%, 100% 30%);
+
   }
-}
-
-.broken {
-  .block {
-    display: none;
+  .part.p2 {
+    transform: translate(2vh, -2vh) scale(0.9) rotate(80deg);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 50% 50%);
   }
-  .fragments {
-    .fragment.f1 {
-      transform: translate(5vh, 2vh) scale(0.9) rotate(20deg);
-      clip-path: polygon(50% 50%, 80% 100%, 100% 100%, 100% 25%);
-
-    }
-    .fragment.f2 {
-      transform: translate(2vh, -2vh) scale(0.9) rotate(80deg);
-      clip-path: polygon(0% 0%, 100% 0%, 100% 25%, 50% 50%);
-
-    }
-    .fragment.f3 {
-      transform: translateX(-2vh) scale(0.9) rotate(-40deg);
-      clip-path: polygon(0% 0%, 50% 50%, 0% 77%);
-    }
-    .fragment.f4 {
-      transform: translateY(2vh) scale(0.9) rotate(20deg);
-      clip-path: polygon(0% 82%, 50% 50%, 80% 100%, 0% 100%)
-    }
+  .part.p3 {
+    transform: translateX(-2vh) scale(0.9) rotate(-40deg);
+    clip-path: polygon(0% 0%, 50% 50%, 0% 77%);
+  }
+  .part.p4 {
+    transform: translateY(2vh) scale(0.9) rotate(20deg);
+    clip-path: polygon(0% 82%, 50% 50%, 80% 100%, 0% 100%)
   }
 }

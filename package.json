@@ -1,19 +1,14 @@
 {
-  "name": "nextjs-typescript-quickstart",
+  "name": "test-clickr",
   "version": "1.0.0",
-  "description": "Next.js with TypeScript test",
+  "description": "Test clicker game thingie",
   "main": "N/A",
   "license": "Unlicense",
   "private": true,
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "format": "prettier --write \"./**/*.{ts,tsx}\"",
-    "lint": "eslint \"**/*.{ts,tsx}\" \"*.config.js\"",
-    "now-build": "cross-env BUILD_TARGET=serverless next build",
-    "test": "npm run type-check && npm run lint",
-    "type-check": "tsc --noEmit"
+    "start": "next start"
   },
   "dependencies": {
     "modern-normalize": "^1.0.0",
