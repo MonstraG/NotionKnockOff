@@ -1,7 +1,7 @@
-import Page from "~/components/Page/Page";
-import PageHeader from "~/components/PageHeader/PageHeader";
-import Navigation from "~/components/Navigation/Navigation";
-import Content from "~/components/Content/Content";
+import Page from "~/components/Page";
+import PageHeader from "~/components/PageHeader";
+import Navigation from "~/components/Navigation";
+import Content from "~/components/Content";
 import { NextPage } from "next";
 
 const IndexPage: NextPage = () => {

@@ -1,15 +1,15 @@
 import { NextPage } from "next";
-import Link from "next/link";
-import Page from "~/components/Page/Page";
-import PageHeader from "~/components/PageHeader/PageHeader";
-import PageBody from "~/components/PageBody/PageBody";
-import Navigation from "~/components/Navigation/Navigation";
-import Content from "~/components/Content/Content";
+import Page from "~/components/Page";
+import PageHeader from "~/components/PageHeader";
+import PageBody from "~/components/PageBody";
+import Navigation from "~/components/Navigation";
+import Content from "~/components/Content";
+import { Linka } from "~/utils/common";
 
 const lastUpdated = "2018-09-25T19:30:01+07:00";
 
 const AboutPage: NextPage = () => (
-  <Page title="About | Next.js TypeScript Quickstart">
+  <Page title="About">
     <Navigation />
     <Content>
       <PageHeader>About us.</PageHeader>
@@ -19,10 +19,8 @@ const AboutPage: NextPage = () => (
           uberiora certe sunt. Ad corpus diceres pertinere-, sed ea, quae dixi, ad corpusne refers?
         </p>
         <p>
-          Last updated: <time dateTime={lastUpdated}>{new Date(lastUpdated).toLocaleDateString()} </time>
-          <Link href="/" passHref>
-            <a>Return home</a>
-          </Link>
+          Last updated: <time dateTime={lastUpdated}>{new Date(lastUpdated).toLocaleDateString()}</time>
+          <Linka href="/">Return home</Linka>
         </p>
       </PageBody>
     </Content>
