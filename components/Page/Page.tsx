@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { FC } from "react";
-
 import styles from "./Page.module.css";
 
 interface PageProps {
