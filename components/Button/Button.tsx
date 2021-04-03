@@ -7,10 +7,8 @@ type Props = {
   cb?: () => void;
 }
 
-const Button: FC<Props & Style> = ({ children, style, cb }) => {
-  return (
-    <button className={styles.button} style={style} onClick={cb}>{children}</button>
-  )
-}
+const Button: FC<Props & Style> = ({ style, cb, children }) => (
+  <button className={styles.button} style={style} onClick={cb}>{children}</button>
+)
 
 export default Button;

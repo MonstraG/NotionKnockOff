@@ -56,4 +56,5 @@ const IndexPage: NextPage = () => {
     </Page>
   );
 };
+
 export default IndexPage;
