@@ -15,21 +15,27 @@ const Main = styled.main`
 `;
 
 const PageHeader = styled.header`
-  padding: 2rem 1.5rem 1rem;
+  padding: 2rem 1.5rem 0;
 `;
 
 const H1 = styled.h1`
   margin: 0;
 `;
 
+const PageBody = styled.section`
+  padding: 2rem 1.5rem 2rem;
+  p:first-child {
+    margin-top: 0;
+  }
+  p:last-child {
+    margin-bottom: 0;
+  }
+`;
+
 interface PageProps {
   title?: string;
   header?: string;
 }
-
-const PageBody = styled.section`
-  padding: 0 1.5rem 2rem;
-`;
 
 const Layout: FC<PageProps> = ({ title, header, children }) => (
   <PageContent>
