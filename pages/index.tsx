@@ -4,15 +4,13 @@ import Navigation from "~/components/Navigation";
 import Content from "~/components/Content";
 import { NextPage } from "next";
 
-const IndexPage: NextPage = () => {
-  return (
-    <Page>
-      <Navigation />
-      <Content>
-        <PageHeader>Hello world.</PageHeader>
-      </Content>
-    </Page>
-  );
-};
+const IndexPage: NextPage = () => (
+  <Page>
+    <Navigation />
+    <Content>
+      <PageHeader>Hello world.</PageHeader>
+    </Content>
+  </Page>
+);
 
 export default IndexPage;

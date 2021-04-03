@@ -1,8 +1,8 @@
 import { FC } from "react";
-import { Linka } from "~/utils/common";
 import styled from "styled-components";
+import Link from "next/link";
 
-const Root = styled.header`
+const Header = styled.header`
   display: flex;
   flex-direction: row;
   padding: 0.75rem 1.5rem;
@@ -21,7 +21,7 @@ const Nav = styled.nav`
   flex: 1 1 auto;
 `;
 
-const NavLink = styled(Linka)`
+const NavLink = styled.a`
   color: white;
   text-decoration: none;
   margin: 0 0.75rem;
@@ -35,16 +35,21 @@ const NavLink = styled(Linka)`
   :last-child {
     margin-right: 0;
   }
+  cursor: pointer;
 `;
 
 const Navigation: FC = () => (
-  <Root>
+  <Header>
     <Logo>¤</Logo>
     <Nav>
-      <NavLink href="/">Home</NavLink>
-      <NavLink href="/about">About</NavLink>
+      <Link href="/">
+        <NavLink>Home</NavLink>
+      </Link>
+      <Link href="/about">
+        <NavLink>About</NavLink>
+      </Link>
     </Nav>
-  </Root>
+  </Header>
 );
 
 export default Navigation;

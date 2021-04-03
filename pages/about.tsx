@@ -19,8 +19,7 @@ const AboutPage: NextPage = () => (
           uberiora certe sunt. Ad corpus diceres pertinere-, sed ea, quae dixi, ad corpusne refers?
         </p>
         <p>
-          Last updated: <time dateTime={lastUpdated}>{new Date(lastUpdated).toLocaleDateString()}</time>
-          <Linka href="/">Return home</Linka>
+          Last updated: <time dateTime={lastUpdated}>{new Date(lastUpdated).toLocaleDateString()}</time> <Linka href="/">Return home</Linka>
         </p>
       </PageBody>
     </Content>
