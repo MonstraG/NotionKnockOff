@@ -11,8 +11,7 @@ import BlockRow from "~/components/Block/BlockRow";
 
 const IndexPage: NextPage = () => {
   const { state, setState } = useGameState();
-  const incMoney = () => setState((s: GameState) =>
-    ({ ...s, money: s.money + 1 }))
+  const incMoney = () => setState((s: GameState) => ({ ...s, money: s.money + 1 }));
 
   const buyBlock = () => {
     if (!canBuy()) return;
@@ -21,7 +20,7 @@ const IndexPage: NextPage = () => {
       money: s.money - s.blocks,
       blocks: s.blocks + 1
     }));
-  }
+  };
 
   const canBuy = () => state.money >= state.blocks;
 

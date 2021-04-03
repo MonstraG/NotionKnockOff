@@ -14,6 +14,6 @@ const MyApp: FC<AppProps> = ({ pageProps, Component }): JSX.Element => (
       <Component {...pageProps} />
     </GameStateProvider>
   </>
-)
+);
 
 export default MyApp;

@@ -1,7 +1,7 @@
-import Link from 'next/link'
-import { FC } from 'react'
+import Link from "next/link";
+import { FC } from "react";
 
-import styles from './Navigation.module.css'
+import styles from "./Navigation.module.css";
 
 const Navigation: FC = () => (
   <header className={styles.root}>
@@ -15,6 +15,6 @@ const Navigation: FC = () => (
       </Link>
     </nav>
   </header>
-)
+);
 
-export default Navigation
+export default Navigation;

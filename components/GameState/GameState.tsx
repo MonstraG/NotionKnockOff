@@ -5,5 +5,5 @@ export type GameState = {
 
 export const initialGameState: GameState = {
   money: 0,
-  blocks: 1,
+  blocks: 1
 };

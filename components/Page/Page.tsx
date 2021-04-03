@@ -1,10 +1,10 @@
-import Head from 'next/head'
-import { FC } from 'react'
+import Head from "next/head";
+import { FC } from "react";
 
-import styles from './Page.module.css'
+import styles from "./Page.module.css";
 
 interface PageProps {
-  title?: string
+  title?: string;
 }
 
 const Page: FC<PageProps> = ({ children, title }) => (
@@ -14,6 +14,6 @@ const Page: FC<PageProps> = ({ children, title }) => (
     </Head>
     {children}
   </div>
-)
+);
 
-export default Page
+export default Page;

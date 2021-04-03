@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from "react";
 import { Style } from "~/utils/Style";
-import styles from "./Block.module.scss"
+import styles from "./Block.module.scss";
 
-const crackDisplay = (crackN: number) => (curr: number) => curr >= crackN ? "block" : "none";
+const crackDisplay = (crackN: number) => (curr: number) => (curr >= crackN ? "block" : "none");
 const isBroken = (curr: number) => curr >= 5;
 
 type Props = {
   onBreak: () => void;
-}
+};
 
 const Block: FC<Props & Style> = ({ style, onBreak }) => {
   const [state, setState] = useState<number>(0);
@@ -29,7 +29,7 @@ const Block: FC<Props & Style> = ({ style, onBreak }) => {
         <div className={`${styles.part} ${styles.p4}`} style={{ display: crackDisplay(4)(state) }} />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Block;
