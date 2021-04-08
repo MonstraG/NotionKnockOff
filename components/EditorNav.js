@@ -1,23 +1,23 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ReactComponent as BoldIcon} from './icons/bold.svg';
-import { ReactComponent as LinkIcon} from './icons/chain.svg';
-import { ReactComponent as CodeIcon} from './icons/code.svg';
-import { ReactComponent as ImageIcon} from './icons/file-image-o.svg';
-import { ReactComponent as HeadingIcon} from './icons/header.svg';
-import { ReactComponent as ItalicIcon} from './icons/italic.svg';
-import { ReactComponent as StrikeThroughIcon} from './icons/strikethrough.svg';
-import { ReactComponent as OlListIcon} from './icons/list-ol.svg';
-import { ReactComponent as UlListIcon} from './icons/list-ul.svg';
-import { ReactComponent as BlockQuoteIcon} from './icons/quote-right.svg';
-import { ReactComponent as DownloadIcon} from './icons/download.svg';
-import { ReactComponent as OpenFileIcon} from './icons/upload2.svg';
-import { ReactComponent as RedoIcon} from './icons/redo2.svg';
-import { ReactComponent as UndoIcon} from './icons/undo2.svg';
-import { ReactComponent as CloseIcon } from './icons/close.svg';
-import { ReactComponent as MarkdownIcon } from './icons/markdown.svg';
-import { ReactComponent as PdfIcon } from './icons/pdf.svg';
-import { ReactComponent as HtmlIcon } from './icons/embed.svg';
-import Modal from './Modal.js';
+import React, { useEffect, useRef, useState } from "react";
+import { ReactComponent as BoldIcon } from "./icons/bold.svg";
+import { ReactComponent as LinkIcon } from "./icons/chain.svg";
+import { ReactComponent as CodeIcon } from "./icons/code.svg";
+import { ReactComponent as ImageIcon } from "./icons/file-image-o.svg";
+import { ReactComponent as HeadingIcon } from "./icons/header.svg";
+import { ReactComponent as ItalicIcon } from "./icons/italic.svg";
+import { ReactComponent as StrikeThroughIcon } from "./icons/strikethrough.svg";
+import { ReactComponent as OlListIcon } from "./icons/list-ol.svg";
+import { ReactComponent as UlListIcon } from "./icons/list-ul.svg";
+import { ReactComponent as BlockQuoteIcon } from "./icons/quote-right.svg";
+import { ReactComponent as DownloadIcon } from "./icons/download.svg";
+import { ReactComponent as OpenFileIcon } from "./icons/upload2.svg";
+import { ReactComponent as RedoIcon } from "./icons/redo2.svg";
+import { ReactComponent as UndoIcon } from "./icons/undo2.svg";
+import { ReactComponent as CloseIcon } from "./icons/close.svg";
+import { ReactComponent as MarkdownIcon } from "./icons/markdown.svg";
+import { ReactComponent as PdfIcon } from "./icons/pdf.svg";
+import { ReactComponent as HtmlIcon } from "./icons/embed.svg";
+import Modal from "./Modal.tsx";
 
 const IconElement = (props) => {
     return (
@@ -30,12 +30,9 @@ const IconElement = (props) => {
 
 }
 const EditingIcons = (props) => {
-
-
     const changeSelectedText = (textArea, startPos, endPos, enclosingTextStart, enclosingTextEnd) => {
-            const selectedText = textArea.value.slice(startPos, endPos);
-            const output = `${enclosingTextStart}${selectedText}${enclosingTextEnd}`
-            return output;
+      const selectedText = textArea.value.slice(startPos, endPos);
+      return `${enclosingTextStart}${selectedText}${enclosingTextEnd}`;
     }
 
     const formatMarkdownCode = ()  => {
@@ -54,7 +51,7 @@ const EditingIcons = (props) => {
             if(startPos !== endPos) {
                 text = changeSelectedText(textArea, startPos, endPos, "`", "`");
             }
-            
+
         }
         else {
             const enclosers = "```\n";
@@ -65,7 +62,7 @@ const EditingIcons = (props) => {
                 text = changeSelectedText(textArea, startPos, endPos, enclosers, enclosingTextEnd);
             }
         }
-        currentValue  = `${textBeforeCursorPosition}${text}${textAfterCursorPosition}`; 
+        currentValue  = `${textBeforeCursorPosition}${text}${textAfterCursorPosition}`;
         curString = `${textBeforeCursorPosition}${text}`;
         textArea.value = currentValue;
         cursorIndex = Number(curString.length);
@@ -88,11 +85,11 @@ const EditingIcons = (props) => {
         const textAfterCursorPosition = textArea.value.substring(endPos, textArea.value.length)
 
         if(enclosingTextEnd){
-            currentValue  = `${textBeforeCursorPosition}${text}${textAfterCursorPosition}`; 
+            currentValue  = `${textBeforeCursorPosition}${text}${textAfterCursorPosition}`;
             curString = `${textBeforeCursorPosition}${text}`;
         }
         else {
-            currentValue  = `${textBeforeCursorPosition}\n${text}\n${textAfterCursorPosition}`; 
+            currentValue  = `${textBeforeCursorPosition}\n${text}\n${textAfterCursorPosition}`;
             curString = `${textBeforeCursorPosition}\n${text}`;
         }
 
@@ -144,7 +141,7 @@ const NavbarMainTools = (props) => {
         reader.readAsText(file);
     }
 
-    
+
     return (
         <div className="navbar__maintools nav-child">
             <input onChange={(e) => {readMarkdownFile(e)}} type="file" id="upload" name="upload" ref={inputEl} />
@@ -156,7 +153,7 @@ const NavbarMainTools = (props) => {
                         <div  className="modal__content">
                          <div className="modal__header">
                             <button  onClick={() => {toggleModal()}}
-                             className="modal__close-btn" id="close-modal" 
+                             className="modal__close-btn" id="close-modal"
                              title="close modal" arial-label="Close Modal">
                           <CloseIcon />
                         </button>
@@ -184,7 +181,7 @@ const NavbarMainTools = (props) => {
             ):null }
         </div>
     )
-} 
+}
 
 
 const Nav = (props) => {
@@ -197,7 +194,7 @@ const Nav = (props) => {
         // check if markdown link button is clicked
         if(!markdownImageLink) {
             setDescription("Please provide a URL for your link.");
-        } 
+        }
         else {
             setDescription("Please provide a URL for your image.");
         }
@@ -226,16 +223,16 @@ const Nav = (props) => {
             text = "enter image description here";
             exclamation = "!";
         }
-         
+
 
         if(startPos !== endPos) {
             text = textArea.value.slice(startPos, endPos);
         }
         if(lines[lines.length - 1 ]) {
-            currentValue  = `${textBeforeCursorPosition} ${exclamation}[${text}](${url}) ${textAfterCursorPosition}`; 
+            currentValue  = `${textBeforeCursorPosition} ${exclamation}[${text}](${url}) ${textAfterCursorPosition}`;
             curString = `${textBeforeCursorPosition} ${exclamation}[${text}](${url})`
         }else{
-            currentValue  = `${textBeforeCursorPosition}\n${exclamation}[${text}](${url})\n${textAfterCursorPosition}`; 
+            currentValue  = `${textBeforeCursorPosition}\n${exclamation}[${text}](${url})\n${textAfterCursorPosition}`;
             curString = `${textBeforeCursorPosition}\n${exclamation}[${text}](${url})`;
         }
 
@@ -249,7 +246,7 @@ const Nav = (props) => {
     return (
         <header>
             <nav className="navbar">
-                <EditingIcons  
+                <EditingIcons
                 toggleModal={toggleModal}
                 setMarkdownImagelink={setMarkdownImagelink}
                 getTextArea={props.getTextArea}
@@ -277,11 +274,11 @@ const Nav = (props) => {
                             else {
                                 formatMarkdownLink("image", event.target.elements.url.value);
                             }
-                        }} 
+                        }}
                         className="modal__content">
                          <div className="modal__header">
                             <button  onClick={() => {toggleModal()}}
-                             className="modal__close-btn" id="close-modal" 
+                             className="modal__close-btn" id="close-modal"
                              title="close modal" arial-label="Close Modal">
                           <CloseIcon />
                         </button>
@@ -294,7 +291,7 @@ const Nav = (props) => {
                             </div>
                         </div>
                         <div className="modal__footer modal_buttons">
-                            <button onClick={() => {toggleModal()}} 
+                            <button onClick={() => {toggleModal()}}
                             className="modal-footer__btn modal__cancel-btn">Cancel</button>
                             <button className="modal-footer__btn modal__okay-btn" type="submit">Ok</button>
                         </div>
