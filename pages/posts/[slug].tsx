@@ -2,10 +2,10 @@ import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import Layout from "~/components/Layout";
 import { getAllPosts, getPostBySlug, Post } from "../../lib/api";
-import markdownToHtml from "../../lib/mdToHtml";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
+import marked from "marked";
 
 type Props = {
   post: Post;
@@ -39,7 +39,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }):
   }
 
   const post = getPostBySlug(params.slug, ["title", "date", "slug", "author", "content"]);
-  const content = await markdownToHtml(post.content || "");
+  const content = await marked(post.content || "");
 
   return {
     props: {
