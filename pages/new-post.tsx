@@ -107,26 +107,29 @@ const EditorPage: FC = () => {
   };
 
   const onScrollHandler = (e: Event) => {
+    if (!editorRef.current) return;
+
     // sync texteditor and preview windows
     if (e.type === "change") {
       editorRef.current.scrollTop = editorRef.current.scrollHeight;
     } else {
-      if (e.target.className === "markdown-input") {
-        mdPreviewElement.scrollTop = editorRef.current.scrollTop;
-      } else if (!mdPreviewElement === "hide") {
-        editorRef.current.scrollTop = mdPreviewElement.scrollTop;
+      if (e?.target?.className === "markdown-input") {
+        previewRef.current.scrollTop = editorRef.current.scrollTop;
+      } else if (!previewRef.current === "hide") {
+        editorRef.current.scrollTop = previewRef.current.scrollTop;
       }
     }
   };
 
   const getDomElements = () => {
-    const appWrapperNode = appWrapper.current;
-    const headerElement = appWrapperNode.querySelector("header");
-    const editorWrapper = appWrapperNode.querySelector(".editor-wrapper");
-    const mdPreviewElement = appWrapperNode.querySelector(".markdown-previewer");
-    const textAreaElement = appWrapperNode.querySelector("textarea");
-    const buttonBarElement = appWrapperNode.querySelector(".buttonbar");
-    const editButton = appWrapperNode.querySelector(".edit-button");
+    if (!appWrapper.current) return {};
+
+    const headerElement = appWrapper.current.querySelector("header");
+    const editorWrapper = appWrapper.current.querySelector(".editor-wrapper");
+    const mdPreviewElement = appWrapper.current.querySelector(".markdown-previewer");
+    const textAreaElement = appWrapper.current.querySelector("textarea");
+    const buttonBarElement = appWrapper.current.querySelector(".buttonbar");
+    const editButton = appWrapper.current.querySelector(".edit-button");
     return {
       headerElement,
       editorWrapper,
@@ -169,6 +172,7 @@ const EditorPage: FC = () => {
     const doc = new jsPDF();
     doc.text(content, 10, 10);
     doc.save(filename);
+    hideModal();
   };
 
   const changeHandler = (e) => {
@@ -178,15 +182,13 @@ const EditorPage: FC = () => {
   };
 
   const keyDownHandler = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    // save state in history if backspace or delete or enter key
-    // is pressed
-    // backspace: 8, delete: 46, enter: 13
+    // save state in history if backspace or delete or enter key is pressed
     if (["Backspace", "Delete", "Enter", "NumpadEnter"].includes(event.code)) {
       saveHistory(md);
     }
   };
 
-  const saveHistory = (newValue) => {
+  const saveHistory = (newValue: string) => {
     const newMdHistory = mdHistory.slice(0, historyStep + 1);
     setMdHistory(newMdHistory.concat([newValue]));
     setHistoryStep((historyStep += 1));
