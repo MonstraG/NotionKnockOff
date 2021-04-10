@@ -1,33 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ReactComponent as BoldIcon } from "./icons/bold.svg";
-import { ReactComponent as LinkIcon } from "./icons/chain.svg";
-import { ReactComponent as CodeIcon } from "./icons/code.svg";
-import { ReactComponent as ImageIcon } from "./icons/file-image-o.svg";
-import { ReactComponent as HeadingIcon } from "./icons/header.svg";
-import { ReactComponent as ItalicIcon } from "./icons/italic.svg";
-import { ReactComponent as StrikeThroughIcon } from "./icons/strikethrough.svg";
-import { ReactComponent as OlListIcon } from "./icons/list-ol.svg";
-import { ReactComponent as UlListIcon } from "./icons/list-ul.svg";
-import { ReactComponent as BlockQuoteIcon } from "./icons/quote-right.svg";
-import { ReactComponent as DownloadIcon } from "./icons/download.svg";
-import { ReactComponent as OpenFileIcon } from "./icons/upload2.svg";
-import { ReactComponent as RedoIcon } from "./icons/redo2.svg";
-import { ReactComponent as UndoIcon } from "./icons/undo2.svg";
-import { ReactComponent as CloseIcon } from "./icons/close.svg";
-import { ReactComponent as MarkdownIcon } from "./icons/markdown.svg";
-import { ReactComponent as PdfIcon } from "./icons/pdf.svg";
-import { ReactComponent as HtmlIcon } from "./icons/embed.svg";
 import Modal from "./Modal.tsx";
 
 const IconElement = (props) => (
-  <div className={props.buttonType}>
-    <button
-      onClick={props.handleClick}
-      className="navbar__button"
-      title={props.title}
-      arial-label={props.label}
-      id={props.id}
-      disabled={props.disabled}>
+  <div>
+    <button onClick={props.handleClick} title={props.title} arial-label={props.label} id={props.id} disabled={props.disabled}>
       {props.children}
     </button>
   </div>
@@ -39,9 +15,9 @@ const EditingIcons = (props) => {
   };
 
   const formatMarkdownCode = () => {
-    let currentValue = null;
-    let cursorIndex = 0;
-    let curString = "";
+    let currentValue;
+    let cursorIndex;
+    let curString;
     const textArea = props.getTextArea();
     let text = "`enter code here`";
     const startPos = textArea.selectionStart;
@@ -70,9 +46,9 @@ const EditingIcons = (props) => {
     props.updateMarkdownState(currentValue, cursorIndex);
   };
   const formatText = (defaultText, enclosingTextStart, enclosingTextEnd) => {
-    let currentValue = null;
-    let cursorIndex = 0;
-    let curString = "";
+    let currentValue;
+    let cursorIndex;
+    let curString;
     const textArea = props.getTextArea();
     let text = defaultText;
     const startPos = textArea.selectionStart;
@@ -99,7 +75,7 @@ const EditingIcons = (props) => {
   };
 
   return (
-    <div className="navbar__editing nav-child">
+    <div>
       <IconElement
         buttonType="redo-btn"
         handleClick={() => {
@@ -241,7 +217,7 @@ const NavbarMainTools = (props) => {
   };
 
   return (
-    <div className="navbar__maintools nav-child">
+    <div>
       <input
         onChange={(e) => {
           readMarkdownFile(e);
@@ -267,46 +243,42 @@ const NavbarMainTools = (props) => {
         label="Export">
         <DownloadIcon />
       </IconElement>
-      {showModal ? (
+      {showModal && (
         <Modal>
-          <div className="modal__wrap">
-            <div className="modal__content">
-              <div className="modal__header">
+          <div>
+            <div>
+              <div>
                 <button
                   onClick={() => {
                     toggleModal();
                   }}
-                  className="modal__close-btn"
                   id="close-modal"
                   title="close modal"
-                  arial-label="Close Modal">
+                  aria-label="Close Modal">
                   <CloseIcon />
                 </button>
               </div>
-              <div className="modal__body">
+              <div>
                 <h1>Save As</h1>
-                <div className="modal__saveicons">
+                <div>
                   <button
                     onClick={() => {
                       props.saveAsMarkdown(toggleModal);
-                    }}
-                    className="save-markdown">
+                    }}>
                     <MarkdownIcon />
                     <span>Markdown</span>
                   </button>
                   <button
                     onClick={() => {
                       props.saveAsHtml(toggleModal);
-                    }}
-                    className="save-html">
+                    }}>
                     <HtmlIcon />
                     <span>HTML</span>
                   </button>
                   <button
                     onClick={() => {
                       props.saveAsPDF(toggleModal);
-                    }}
-                    className="save-pdf">
+                    }}>
                     <PdfIcon />
                     <span>PDF</span>
                   </button>
@@ -315,7 +287,7 @@ const NavbarMainTools = (props) => {
             </div>
           </div>
         </Modal>
-      ) : null}
+      )}
     </div>
   );
 };
@@ -377,7 +349,7 @@ const Nav = (props) => {
 
   return (
     <header>
-      <nav className="navbar">
+      <nav>
         <EditingIcons
           toggleModal={toggleModal}
           setMarkdownImagelink={setMarkdownImagelink}
@@ -399,7 +371,7 @@ const Nav = (props) => {
         />
         {showModal && (
           <Modal>
-            <div className="modal__wrap">
+            <div>
               <form
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -409,40 +381,33 @@ const Nav = (props) => {
                   } else {
                     formatMarkdownLink("image", event.target.elements.url.value);
                   }
-                }}
-                className="modal__content">
-                <div className="modal__header">
+                }}>
+                <div>
                   <button
                     onClick={() => {
                       toggleModal();
                     }}
-                    className="modal__close-btn"
                     id="close-modal"
                     title="close modal"
-                    arial-label="Close Modal">
+                    aria-label="Close Modal">
                     <CloseIcon />
                   </button>
                 </div>
-                <div className="modal__body">
+                <div>
                   <p>{description}</p>
-                  <div className="modal__form">
-                    <label htmlFor="url" className="modal__label">
-                      URL
-                    </label>
-                    <input type="url" name="url" className="modal__input" />
+                  <div>
+                    <label htmlFor="url">URL</label>
+                    <input type="url" name="url" />
                   </div>
                 </div>
-                <div className="modal__footer modal_buttons">
+                <div>
                   <button
                     onClick={() => {
                       toggleModal();
-                    }}
-                    className="modal-footer__btn modal__cancel-btn">
+                    }}>
                     Cancel
                   </button>
-                  <button className="modal-footer__btn modal__okay-btn" type="submit">
-                    Ok
-                  </button>
+                  <button type="submit">Ok</button>
                 </div>
               </form>
             </div>

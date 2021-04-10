@@ -1,6 +1,5 @@
 import Layout from "~/components/Layout";
-import React, { FC, useEffect, useRef, useState, KeyboardEvent } from "react";
-
+import { FC, useEffect, useRef, useState, KeyboardEvent } from "react";
 import marked from "marked";
 import FileSaver from "file-saver";
 import { jsPDF } from "jspdf";
@@ -52,13 +51,9 @@ const EditorPage: FC = () => {
 
   useEffect(() => {
     if (editorRef.current && previewRef.current) {
-      if (!(previewRef.current.className === "hide")) {
-        editorRef.current.addEventListener("scroll", onScrollHandler);
-        previewRef.current.addEventListener("scroll", onScrollHandler);
-        // scroll to bottom
-        editorRef.current.scrollTop = editorRef.current.scrollHeight;
-        previewRef.current.scrollTop = previewRef.current.scrollHeight;
-      }
+      //on scroll:
+      // todo: sync preview and editor
+      // scroll to bottom on open
     }
   }, [previewRef, editorRef]);
 
@@ -106,53 +101,6 @@ const EditorPage: FC = () => {
     editorRef.current.focus();
   };
 
-  const onScrollHandler = (e: Event) => {
-    if (!editorRef.current) return;
-
-    // sync texteditor and preview windows
-    if (e.type === "change") {
-      editorRef.current.scrollTop = editorRef.current.scrollHeight;
-    } else {
-      if (e?.target?.className === "markdown-input") {
-        previewRef.current.scrollTop = editorRef.current.scrollTop;
-      } else if (!previewRef.current === "hide") {
-        editorRef.current.scrollTop = previewRef.current.scrollTop;
-      }
-    }
-  };
-
-  const getDomElements = () => {
-    if (!appWrapper.current) return {};
-
-    const headerElement = appWrapper.current.querySelector("header");
-    const editorWrapper = appWrapper.current.querySelector(".editor-wrapper");
-    const mdPreviewElement = appWrapper.current.querySelector(".markdown-previewer");
-    const textAreaElement = appWrapper.current.querySelector("textarea");
-    const buttonBarElement = appWrapper.current.querySelector(".buttonbar");
-    const editButton = appWrapper.current.querySelector(".edit-button");
-    return {
-      headerElement,
-      editorWrapper,
-      mdPreviewElement,
-      textAreaElement,
-      buttonBarElement,
-      editButton
-    };
-  };
-
-  const showEditMode = () => {
-    const { editorWrapper, mdPreviewElement, textAreaElement, buttonBarElement, headerElement, editButton } = getDomElements();
-    // check eye button was clicked when textarea was in fullscreen mode
-    headerElement.classList.toggle("hide");
-    buttonBarElement.classList.toggle("hide");
-    textAreaElement.classList.toggle("hide");
-    editorWrapper.classList.toggle("col-1");
-    mdPreviewElement.classList.toggle("editor-padding");
-    mdPreviewElement.classList.toggle("editor-col");
-    mdPreviewElement.classList.toggle("show");
-    editButton.classList.toggle("show");
-  };
-
   const saveAsHtml = (hideModal: () => void) => {
     const content = marked(md);
     const blob = new Blob([content], { type: "text/html;charset=utf-8" });
@@ -196,7 +144,7 @@ const EditorPage: FC = () => {
 
   return (
     <Layout>
-      <div className="container" ref={appWrapper}>
+      <div ref={appWrapper}>
         <EditorNav
           getTextArea={getTextArea}
           setCursorPos={setCursorPos}
@@ -211,23 +159,12 @@ const EditorPage: FC = () => {
           saveAsMarkdown={saveAsMarkdown}
           saveAsPDF={saveAsPDF}
         />
-        <div className="editor-container">
-          <div className="split editor-wrapper" ref={editorWrapperRef}>
+        <div>
+          <div ref={editorWrapperRef}>
             <div>
-              <textarea
-                ref={editorRef}
-                className="markdown-input"
-                onBlur={changeHandler}
-                onChange={changeHandler}
-                onKeyDown={keyDownHandler}
-                value={md}
-              />
+              <textarea ref={editorRef} onBlur={changeHandler} onChange={changeHandler} onKeyDown={keyDownHandler} value={md} />
             </div>
-            <ButtonBar getDomElements={getDomElements} />
             <div ref={previewRef} dangerouslySetInnerHTML={{ __html: marked(md) }} />
-            <button onClick={() => showEditMode()} className="edit-button">
-              <PencilIcon />
-            </button>
           </div>
         </div>
       </div>
