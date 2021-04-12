@@ -1,6 +1,7 @@
 import { FC } from "react";
 import EditorStore from "~/components/Editor/EditorStore";
 import IconButton from "~/components/Editor/IconButton";
+import styled from "styled-components";
 
 type Props = {
   updateMarkdownState: (newValue: string, cursorIndex: number) => void;
@@ -8,6 +9,12 @@ type Props = {
 };
 
 const defaultUrl = "https://google.com";
+
+const ButtonBar = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+`;
 
 const EditorButtons: FC<Props> = ({ updateMarkdownState, textArea }) => {
   const formatMarkdownCode = () => {
@@ -74,45 +81,49 @@ const EditorButtons: FC<Props> = ({ updateMarkdownState, textArea }) => {
   const history = EditorStore.useStore(EditorStore.history);
   const historyStep = EditorStore.useStore(EditorStore.historyStep);
 
+  //todo: hotkeys
+  const redo = () => EditorStore.navigateHistory(1);
+  const undo = () => EditorStore.navigateHistory(-1);
+
   return (
-    <div>
-      <IconButton onClick={() => EditorStore.navigateHistory(1)} title="Redo" disabled={historyStep < history.length - 1}>
-        IRedo
+    <ButtonBar>
+      <IconButton onClick={redo} title="Redo" disabled={historyStep >= history.length - 1}>
+        Redo
       </IconButton>
-      <IconButton onClick={() => EditorStore.navigateHistory(-1)} title="Undo" disabled={historyStep > 0}>
-        IUndo
+      <IconButton onClick={undo} title="Undo" disabled={historyStep <= 0}>
+        Undo
       </IconButton>
-      <IconButton onClick={() => formatText("strong text", "**", false)} title="Bold">
-        IBold
+      <IconButton onClick={() => formatText("strong", "**", false)} title="Bold">
+        Bold
       </IconButton>
-      <IconButton onClick={() => formatText("emphasized text", "*", false)} title="Italic">
-        IItalic
+      <IconButton onClick={() => formatText("emphasized", "*", false)} title="Italic">
+        Italic
       </IconButton>
       <IconButton onClick={() => formatText("heading", "# ", true)} title="Heading">
-        IHeading
+        Heading
       </IconButton>
-      <IconButton onClick={() => formatText("strikethrough text", "~~", false)} title="Strikethrough">
-        IStrketru
+      <IconButton onClick={() => formatText("strikethrough", "~~", false)} title="Strikethrough">
+        Striketru
       </IconButton>
       <IconButton onClick={() => formatText("list item one\n- list item two", "- ", true)} title="Unordered List">
-        IULList
+        UL List
       </IconButton>
       <IconButton onClick={() => formatText("list item one\n2. list item two", "1. ", true)} title="Ordered List">
-        IOlList
+        OlList
       </IconButton>
       <IconButton onClick={() => formatText("Blockquote", "> ", true)} title="Block Quote">
-        IBlockQuote
+        BlockQuote
       </IconButton>
       <IconButton onClick={() => formatMarkdownCode()} title="Code">
-        ICode
+        Code
       </IconButton>
       <IconButton onClick={() => formatMarkdownLink("link")} title="Link">
-        ILink
+        Link
       </IconButton>
       <IconButton onClick={() => formatMarkdownLink("image")} title="Image">
-        IImg
+        Img
       </IconButton>
-    </div>
+    </ButtonBar>
   );
 };
 

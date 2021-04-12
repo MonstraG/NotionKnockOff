@@ -30,6 +30,7 @@ const PageBody = styled.section`
   p:last-child {
     margin-bottom: 0;
   }
+  height: 100%;
 `;
 
 interface PageProps {
