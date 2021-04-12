@@ -2,76 +2,73 @@ import { FC } from "react";
 import EditorStore from "~/components/Editor/EditorStore";
 import IconButton from "~/components/Editor/IconButton";
 
-// todo: use getSelection? //https://developer.mozilla.org/en-US/docs/Web/API/Window/getSelection
-
-const formatSelection = (str: string, prefix: string, block: boolean) => `${prefix}${str}${block ? "" : prefix}`;
-
 type Props = {
   updateMarkdownState: (newValue: string, cursorIndex: number) => void;
+  textArea: HTMLTextAreaElement | null;
 };
 
 const defaultUrl = "https://google.com";
 
-//todo: pass textarea as ref?
-const EditorButtons: FC<Props> = ({ updateMarkdownState }) => {
+const EditorButtons: FC<Props> = ({ updateMarkdownState, textArea }) => {
   const formatMarkdownCode = () => {
-    //https://stackoverflow.com/questions/8931568/detect-if-the-selected-text-spans-on-the-entire-line-or-more-lines
-    //todo:
-    // if selected text contains /n or /r or smth like that, then use ``` otherwise `
+    if (textArea == null) return;
+
+    const { selectionStart, selectionEnd, value } = textArea;
+    const preSelect = value.substring(0, selectionStart);
+    const postSelect = value.substring(selectionEnd, value.length);
+
+    //multiline
+    if (value.substring(0, selectionStart).split("\n").length > 0) {
+      updateTextarea(`${preSelect}\n\`\`\`\n\n\`\`\`\n${postSelect}`, `${preSelect}\n\`\`\`\n`);
+    } else {
+      updateTextarea(`${preSelect}\`\`${postSelect}`, `${preSelect}\``);
+    }
   };
 
-  //todo: simplify, use selection instead of url param (use formatText() instead basically)
-  const formatMarkdownLink = (type: string) => {
-    const startPos = textArea.selectionStart;
-    const endPos = textArea.selectionEnd;
-    const textBeforeCursorPosition = textArea.value.substring(0, startPos);
-    const textAfterCursorPosition = textArea.value.substring(endPos, textArea.value.length);
-    const lines = textArea.value.substring(0, startPos).split("\n");
-    const exclamation = linkType === "image" ? "!" : "";
-    const text = startPos !== endPos ? textArea.value.slice(startPos, endPos) : `enter ${linkType} description here`;
+  const formatMarkdownLink = (linkType: string) => {
+    if (textArea == null) return;
 
-    let currentValue;
-    let cursorIndex;
-    let curString;
-    if (lines[lines.length - 1]) {
-      currentValue = `${textBeforeCursorPosition} ${exclamation}[${text}](${defaultUrl}) ${textAfterCursorPosition}`;
-      curString = `${textBeforeCursorPosition} ${exclamation}[${text}](${defaultUrl})`;
+    const { selectionStart, selectionEnd, value } = textArea;
+    const preSelect = value.substring(0, selectionStart);
+    const postSelect = value.substring(selectionEnd, value.length);
+    const imagePrefix = linkType === "image" ? "!" : "";
+    const text = selectionStart !== selectionEnd ? value.slice(selectionStart, selectionEnd) : `${linkType} description`;
+
+    //multiline
+    if (value.substring(0, selectionStart).split("\n").length > 0) {
+      updateTextarea(
+        `${preSelect} ${imagePrefix}[${text}](${defaultUrl}) ${postSelect}`,
+        `${preSelect} ${imagePrefix}[${text}](${defaultUrl})`
+      );
     } else {
-      currentValue = `${textBeforeCursorPosition}\n${exclamation}[${text}](${defaultUrl})\n${textAfterCursorPosition}`;
-      curString = `${textBeforeCursorPosition}\n${exclamation}[${text}](${defaultUrl})`;
+      updateTextarea(
+        `${preSelect}\n${imagePrefix}[${text}](${defaultUrl})\n${postSelect}`,
+        `${preSelect}\n${imagePrefix}[${text}](${defaultUrl})`
+      );
     }
-
-    textArea.value = currentValue;
-    // get last inserted character index position
-    cursorIndex = Number(curString.length);
-    updateMarkdownState(currentValue, cursorIndex);
   };
 
   // if block, inserts /n's, otherwise puts prefix on both sides
   const formatText = (defaultText: string, prefix: string, block: boolean) => {
-    const startPos = textArea.selectionStart;
-    const endPos = textArea.selectionEnd;
-    // if text is highlighted or selected
-    const text = formatSelection(prefix, startPos !== endPos ? textArea.value.slice(startPos, endPos) : defaultText, block);
+    if (textArea == null) return;
 
-    const beforeSelection = textArea.value.substring(0, startPos);
-    const afterSelection = textArea.value.substring(endPos, textArea.value.length);
+    const { selectionStart, selectionEnd, value } = textArea;
+    const replacedValue = selectionStart !== selectionEnd ? value.slice(selectionStart, selectionEnd) : defaultText;
+    const text = `${prefix}${replacedValue}${block ? "" : prefix}`;
+    const preSelect = value.substring(0, selectionStart);
+    const postSelect = value.substring(selectionEnd, value.length);
 
-    let currentValue;
-    let cursorIndex;
-    let curString;
     if (block) {
-      currentValue = `${beforeSelection}\n${text}\n${afterSelection}`;
-      curString = `${beforeSelection}\n${text}`;
+      updateTextarea(`${preSelect}\n${text}\n${postSelect}`, `${preSelect}\n${text}`);
     } else {
-      currentValue = `${beforeSelection}${text}${afterSelection}`;
-      curString = `${beforeSelection}${text}`;
+      updateTextarea(`${preSelect}${text}${postSelect}`, `${preSelect}${text}`);
     }
+  };
 
-    textArea.value = currentValue;
+  const updateTextarea = (currentValue: string, curString: string) => {
+    if (textArea != null) textArea.value = currentValue;
     // get last inserted character index position
-    cursorIndex = Number(curString.length);
-    props.updateMarkdownState(currentValue, cursorIndex);
+    updateMarkdownState(currentValue, curString.length);
   };
 
   const history = EditorStore.useStore(EditorStore.history);

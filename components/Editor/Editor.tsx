@@ -82,7 +82,7 @@ const Editor: FC = () => {
 
   return (
     <div>
-      <EditorButtons updateMarkdownState={updateMarkdownState} />
+      <EditorButtons updateMarkdownState={updateMarkdownState} textArea={editorRef.current} />
       <div ref={editorWrapperRef}>
         <div>
           <textarea ref={editorRef} onChange={onChange} onKeyDown={keyDownHandler} value={md} />

@@ -48,6 +48,9 @@ const NavBar: FC = () => (
       <Link href="/about">
         <NavLink>About</NavLink>
       </Link>
+      <Link href="/new-post">
+        <NavLink>New post</NavLink>
+      </Link>
     </Nav>
   </Header>
 );
