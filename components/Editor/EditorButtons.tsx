@@ -78,19 +78,15 @@ const EditorButtons: FC<Props> = ({ updateMarkdownState, textArea }) => {
     updateMarkdownState(currentValue, curString.length);
   };
 
-  const history = EditorStore.useStore(EditorStore.history);
-  const historyStep = EditorStore.useStore(EditorStore.historyStep);
-
-  //todo: hotkeys
-  const redo = () => EditorStore.navigateHistory(1);
-  const undo = () => EditorStore.navigateHistory(-1);
+  const canUndo = EditorStore.useStore(EditorStore.canUndo);
+  const canRedo = EditorStore.useStore(EditorStore.canRedo);
 
   return (
     <ButtonBar>
-      <IconButton onClick={redo} title="Redo" disabled={historyStep >= history.length - 1}>
+      <IconButton onClick={EditorStore.redo} title="Redo" disabled={!canRedo}>
         Redo
       </IconButton>
-      <IconButton onClick={undo} title="Undo" disabled={historyStep <= 0}>
+      <IconButton onClick={EditorStore.undo} title="Undo" disabled={!canUndo}>
         Undo
       </IconButton>
       <IconButton onClick={() => formatText("strong", "**", false)} title="Bold">

@@ -238,6 +238,8 @@ const Editor: FC = () => {
   const previewRef = useRef<HTMLDivElement>(null);
 
   const md = EditorStore.useStore(EditorStore.md);
+  const canUndo = EditorStore.useStore(EditorStore.canUndo);
+  const canRedo = EditorStore.useStore(EditorStore.canRedo);
 
   useEffect(() => {
     if (md === "") {
@@ -267,9 +269,26 @@ const Editor: FC = () => {
   const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => EditorStore.setMd(event.target.value);
 
   const keyDownHandler = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    //otherwise internal browser commands execute
+    if (event.ctrlKey) {
+      event.preventDefault();
+    }
     // save state in history if backspace or delete or enter key is pressed
     if (["Backspace", "Delete", "Enter", "NumpadEnter"].includes(event.code)) {
       EditorStore.addHistory(md);
+    }
+
+    if (event.ctrlKey && !event.shiftKey && event.key == "z") {
+      if (canUndo) {
+        EditorStore.undo();
+        return;
+      }
+    }
+    if (event.ctrlKey && event.shiftKey && event.key == "z") {
+      if (canRedo) {
+        EditorStore.redo();
+        return;
+      }
     }
   };
 
