@@ -4,46 +4,53 @@ import matter from "gray-matter";
 
 const postsDirectory = join(process.cwd(), "_pages");
 
-export const getPostSlugs = () => fs.readdirSync(postsDirectory);
+export const getPostSlugs = (): Promise<string[]> => fs.promises.readdir(postsDirectory);
 
 export interface Post {
   slug: string;
   content: string;
   title: string;
-  excerpt: string;
   date: Date;
-  author: string;
 }
 
-type PostFields = (keyof Post)[];
+export type PostFields = (keyof Post)[];
 
-export function getPostBySlug(slug: string, fields: PostFields = []): Post {
-  const realSlug = slug.replace(/\.md$/, "");
-  const fullPath = join(postsDirectory, `${realSlug}.md`);
-  const fileContents = fs.readFileSync(fullPath, "utf8");
-  const { data, content } = matter(fileContents);
+export function getPostBySlug(slug: string, fields: PostFields = []): Promise<Post> {
+  const fileName = slug.replace(/\.md$/, "");
+  const fullPath = join(postsDirectory, `${fileName}.md`);
+  return fs.promises.readFile(fullPath, "utf8").then((fileContents) => {
+    const { data, content } = matter(fileContents);
 
-  const items: Partial<Post> = {};
+    // Ensure only the minimal needed data is exposed
+    const items: Partial<Post> = {};
+    fields.forEach((field) => {
+      if (field === "slug") {
+        items[field] = fileName;
+      }
+      if (field === "content") {
+        items[field] = content;
+      }
 
-  // Ensure only the minimal needed data is exposed
-  fields.forEach((field) => {
-    if (field === "slug") {
-      items[field] = realSlug;
-    }
-    if (field === "content") {
-      items[field] = content;
-    }
+      if (data[field]) {
+        items[field] = data[field];
+      }
+    });
 
-    if (data[field]) {
-      items[field] = data[field];
-    }
+    return items as Post;
   });
-
-  return items as Post;
 }
 
-export const getAllPosts = (fields: PostFields = []): Post[] =>
-  getPostSlugs()
-    .map((slug) => getPostBySlug(slug, fields))
-    // sort posts by date in descending order
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
+  getPostSlugs().then((slugs) => Promise.all(slugs.map((slug) => getPostBySlug(slug, fields))));
+
+export const savePost = (slug: string, content: string) => {
+  //todo: hardcode for now
+  const attributes = `
+---
+title: '${slug}'
+date: '${new Date().toISOString()}'
+---\n
+  `;
+  const fullPath = join(postsDirectory, `${slug}.md`);
+  return fs.promises.writeFile(fullPath, attributes + content);
+};

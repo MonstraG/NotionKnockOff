@@ -1,11 +1,10 @@
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
-import Layout from "~/components/Layout";
 import { getAllPosts, getPostBySlug, Post } from "../../lib/api";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
-import marked from "marked";
+import Editor from "~/components/Editor/Editor";
 
 type Props = {
   post: Post;
@@ -18,13 +17,7 @@ const PostPage: FC<Props> = ({ post }) => {
     return <ErrorPage statusCode={404} />;
   }
 
-  return (
-    <Layout title={post.title} header={post.title}>
-      <article>
-        <div dangerouslySetInnerHTML={{ __html: post.content }} />
-      </article>
-    </Layout>
-  );
+  return <Editor slug={post.slug} post={post.content} />;
 };
 
 export default PostPage;
@@ -38,15 +31,10 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }):
     return { props: { post: {} as Post } };
   }
 
-  const post = getPostBySlug(params.slug, ["title", "date", "slug", "author", "content"]);
-  const content = await marked(post.content || "");
-
+  const post = await getPostBySlug(params.slug, ["title", "date", "slug", "content"]);
   return {
     props: {
-      post: {
-        ...post,
-        content
-      }
+      post
     }
   };
 };
@@ -55,7 +43,7 @@ export async function getStaticPaths() {
   const posts = getAllPosts(["slug"]);
 
   return {
-    paths: posts.map((post: { slug: any }) => ({
+    paths: (await posts).map((post: { slug: any }) => ({
       params: {
         slug: post.slug
       }
