@@ -2,7 +2,7 @@ import fs from "fs";
 import { join } from "path";
 import matter from "gray-matter";
 
-const postsDirectory = join(process.cwd(), "_pages");
+const postsDirectory = join(process.cwd(), "_posts");
 
 export const getPostSlugs = (): Promise<string[]> => fs.promises.readdir(postsDirectory);
 

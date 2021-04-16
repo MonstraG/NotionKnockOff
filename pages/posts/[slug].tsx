@@ -4,7 +4,7 @@ import { getAllPosts, getPostBySlug, Post } from "../../lib/api";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
-import Editor from "~/components/Editor/Editor";
+import Editors from "~/components/Editor/Editors";
 
 type Props = {
   post: Post;
@@ -17,7 +17,7 @@ const PostPage: FC<Props> = ({ post }) => {
     return <ErrorPage statusCode={404} />;
   }
 
-  return <Editor slug={post.slug} post={post.content} />;
+  return <Editors slug={post.slug} post={post.content} />;
 };
 
 export default PostPage;
