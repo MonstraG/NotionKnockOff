@@ -45,8 +45,7 @@ export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
 
 export const savePost = (slug: string, content: string) => {
   //todo: hardcode for now
-  const attributes = `
----
+  const attributes = `---
 title: '${slug}'
 date: '${new Date().toISOString()}'
 ---\n

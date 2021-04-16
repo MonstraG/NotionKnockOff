@@ -1,30 +1,14 @@
 import create from "zustand";
 
-// first call executed immediately, subsequent calls get debounced
-// todo: throttle not debounce
-const debounce = (func: Function, limit: number) => {
-  let timeout: ReturnType<typeof setTimeout>;
-  let debounceActive = false;
-  let debouncing = false; // was there even a call to debounce
-  return function (...args: any[]) {
-    // @ts-ignore
-    const context = this;
-
-    if (debounceActive) {
-      debouncing = true;
-      clearTimeout(timeout);
-    } else {
-      func.apply(context, args);
-      debounceActive = true;
-    }
-
-    timeout = setTimeout(() => {
-      if (debouncing) {
-        func.apply(context, args);
-      }
-      debounceActive = false;
-      debouncing = false;
-    }, limit);
+const throttleAndDebounce = (func: Function) => {
+  let lastArgs: any[];
+  let debounceTimeout: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    lastArgs = args;
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+      func(...lastArgs);
+    }, 500);
   };
 };
 
@@ -53,7 +37,7 @@ namespace EditorStore {
   export const setMd = (md: string, save: boolean = true) => {
     useStore.setState((prevState) => {
       if (save && prevState.slug) {
-        debouncedSave(prevState.slug, md);
+        throttledSave(prevState.slug, md);
       }
       return { md };
     });
@@ -82,7 +66,7 @@ namespace EditorStore {
     await fetch(`/api/savePost?slug=${slug}`, { body, method: "POST" });
   };
 
-  const debouncedSave = debounce(saveToFile, 300);
+  const throttledSave = throttleAndDebounce(saveToFile);
 }
 
 export default EditorStore;

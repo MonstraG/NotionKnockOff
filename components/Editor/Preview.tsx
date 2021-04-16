@@ -99,7 +99,7 @@ const Preview = styled.div`
   font-family: "Open Sans Condensed", sans-serif;
   font-weight: 300;
   margin: 0 auto;
-  padding: 0.25rem;
+  padding: 0.5rem;
 
   h1,
   h2,

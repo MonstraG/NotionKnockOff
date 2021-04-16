@@ -1,6 +1,5 @@
 import { ChangeEvent, FC, useEffect, useRef, KeyboardEvent } from "react";
 import marked from "marked";
-import FileSaver from "file-saver";
 import EditorStore from "~/components/Editor/EditorStore";
 import EditorButtons from "~/components/Editor/EditorButtons";
 import styled from "styled-components";
@@ -8,12 +7,7 @@ import Preview from "~/components/Editor/Preview";
 
 //todo: dom purify?
 
-//todo: save on localstorage save
-export const saveAsMarkdown = (md: string) => {
-  //todo: pagename
-  const blob = new Blob([md], { type: "text/plain;charset=utf-8" });
-  FileSaver.saveAs(blob, "newMarkdownDocument.md");
-};
+//todo: download file to local pc
 
 const initialMd = `
 # This is a heading
@@ -49,7 +43,7 @@ const EditorWrapper = styled.div`
   font-family: "Open Sans Condensed", sans-serif;
   font-weight: 300;
   margin: 0 auto;
-  padding: 0.25rem;
+  padding: 0.5rem;
   background-color: #222;
 `;
 
@@ -67,7 +61,7 @@ const TextArea = styled.textarea`
   font-family: "Open Sans Condensed", sans-serif;
   font-weight: 300;
   margin: 0 auto;
-  padding: 0.25rem;
+  padding: 0.5rem;
   background-color: #222;
   border: none;
 `;
