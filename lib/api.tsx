@@ -43,13 +43,32 @@ export function getPostBySlug(slug: string, fields: PostFields = []): Promise<Po
 export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
   getPostSlugs().then((slugs) => Promise.all(slugs.map((slug) => getPostBySlug(slug, fields))));
 
-export const savePost = (slug: string, content: string) => {
-  //todo: hardcode for now
+export const createNewPost = async (): Promise<string> => {
+  const posts = await getPostSlugs();
+  let newSlug = generateSlug();
+  while (posts.indexOf(newSlug) != -1) {
+    newSlug = generateSlug();
+  }
+  await savePost(newSlug, "Untitled", "");
+  return newSlug;
+};
+
+export const savePost = (slug: string, title: string, content: string) => {
   const attributes = `---
-title: '${slug}'
+title: '${title}'
 date: '${new Date().toISOString()}'
 ---\n
   `;
   const fullPath = join(postsDirectory, `${slug}.md`);
   return fs.promises.writeFile(fullPath, attributes + content);
+};
+
+const generateSlug = () => {
+  const result = [];
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 32; i++) {
+    result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
+  }
+  return result.join("");
 };

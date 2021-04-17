@@ -17,8 +17,6 @@ const PostPage: FC<Props> = ({ post }) => {
     return <ErrorPage statusCode={404} />;
   }
 
-  console.log(post.content);
-
   return <Editor slug={post.slug} post={post.content} />;
 };
 
@@ -42,10 +40,10 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }):
 };
 
 export async function getStaticPaths() {
-  const posts = getAllPosts(["slug"]);
+  const posts = await getAllPosts(["slug"]);
 
   return {
-    paths: (await posts).map((post: { slug: any }) => ({
+    paths: posts.map((post: { slug: any }) => ({
       params: {
         slug: post.slug
       }

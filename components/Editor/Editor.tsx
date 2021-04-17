@@ -19,7 +19,7 @@ const EditorContainer = styled.div`
   width: 21cm; //a4 width
   max-width: calc(100% - 2rem);
   .editor {
-    padding-bottom: 30vh;
+    padding: 15vh 0 30vh;
   }
 `;
 
