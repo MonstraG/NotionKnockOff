@@ -9,13 +9,37 @@ const PageContent = styled.div`
   flex-direction: column;
   height: 100vh;
   overflow: hidden;
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-base-color: ${(props) => props.theme.scrollbar};
+    scrollbar-shadow-color: ${(props) => props.theme.scrollbar};
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 3px;
+    }
+    ::-webkit-scrollbar-button {
+      display: none;
+    }
+    ::-webkit-scrollbar-track {
+      background-color: ${(props) => props.theme.scrollbar};
+    }
+    ::-webkit-scrollbar-track-piece {
+      background-color: ${(props) => props.theme.editorBg};
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: ${(props) => props.theme.scrollbar};
+      border-radius: 3px;
+    }
+  }
 `;
 
 const Main = styled.main`
   display: flex;
   height: 100vh;
   align-items: stretch;
-  background-color: rgb(24, 26, 27);
+  background-color: ${(props) => props.theme.editorBg};
 `;
 
 //todo: theme for styled and common background?

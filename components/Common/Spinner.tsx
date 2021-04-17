@@ -17,16 +17,8 @@ export const Spinner = styled.div`
   border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
   border-left: 0.5em solid #ffffff;
   transform: translateZ(0);
-  animation: load8 1.1s infinite linear;
+  animation: load8 1s infinite linear;
 
-  @-webkit-keyframes load8 {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
   @keyframes load8 {
     0% {
       transform: rotate(0deg);

@@ -4,6 +4,12 @@ import "modern-normalize";
 import { FC, useEffect } from "react";
 import PostNavStore from "~/components/Aside/PostNavStore";
 import Layout from "~/components/Common/Layout";
+import { ThemeProvider } from "styled-components";
+
+const theme = {
+  editorBg: "#181a1b",
+  scrollbar: "#646464"
+};
 
 const MyApp: FC<AppProps> = ({ pageProps, Component }): JSX.Element => {
   useEffect(() => {
@@ -28,9 +34,11 @@ const MyApp: FC<AppProps> = ({ pageProps, Component }): JSX.Element => {
         <meta name="theme-color" content="#000" />
         <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
       </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ThemeProvider theme={theme}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
     </>
   );
 };

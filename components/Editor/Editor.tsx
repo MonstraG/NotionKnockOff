@@ -11,45 +11,12 @@ const EditorWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 4rem 1rem;
-  background-color: rgb(24, 26, 27);
+  background-color: ${(props) => props.theme.editorBg};
   overflow-y: scroll;
-  scrollbar-width: thin;
-  scrollbar-color: dark;
-
-  scrollbar-face-color: #646464;
-  scrollbar-base-color: #646464;
-  scrollbar-3dlight-color: #646464;
-  scrollbar-highlight-color: #646464;
-  scrollbar-track-color: #000;
-  scrollbar-arrow-color: #000;
-  scrollbar-shadow-color: #646464;
-  scrollbar-dark-shadow-color: #646464;
-
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 3px;
-  }
-  ::-webkit-scrollbar-button {
-    display: none;
-  }
-  ::-webkit-scrollbar-track {
-    background-color: #646464;
-  }
-  ::-webkit-scrollbar-track-piece {
-    background-color: rgb(24, 26, 27);
-  }
-  ::-webkit-scrollbar-thumb {
-    height: 50px;
-    background-color: #666;
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-corner {
-    background-color: rgb(24, 26, 27);
-  }
 `;
 
 const EditorContainer = styled.div`
-  width: 21cm;
+  width: 21cm; //a4 width
   max-width: calc(100% - 2rem);
   .editor {
     padding-bottom: 30vh;

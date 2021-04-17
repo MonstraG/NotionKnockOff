@@ -6,14 +6,13 @@ import PostNavStore from "~/components/Aside/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
 
 const Aside = styled.aside`
-  flex-grow: 0;
   width: 250px;
   background-color: #333;
   flex-shrink: 0;
 `;
 
 const UnstyledUl = styled.ul`
-  padding: 0;
+  padding: 2rem 0;
   list-style: none;
   margin: 0;
 `;
@@ -30,8 +29,8 @@ const ListItem = styled.li<{ $active: boolean }>`
 
 const Anchor = styled.a`
   display: block;
-  margin: 1rem;
-  padding: 0.2rem 0;
+  margin: 0 1rem;
+  padding: 0.4rem 0;
   text-decoration: none;
   &,
   &:visited {
