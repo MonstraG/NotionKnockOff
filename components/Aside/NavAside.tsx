@@ -3,6 +3,7 @@ import { CenteredSpinner } from "~/components/Common/Spinner";
 import styled from "styled-components";
 import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
+import EditorStore from "~/components/Editor/EditorStore";
 
 //todo: classname didn't match
 const Aside = styled.aside`
@@ -12,18 +13,20 @@ const Aside = styled.aside`
   flex-shrink: 0;
 `;
 
-const EmptyUl = styled.ul`
+const UnstyledUl = styled.ul`
   padding: 0;
   list-style: none;
   margin: 0;
 `;
 
-const ListItem = styled.li`
+const ListItem = styled.li<{ $active: boolean }>`
   :hover {
     background-color: rgb(70, 70, 70);
   }
   transition: all 0.2s;
   cursor: pointer;
+  user-select: none;
+  font-weight: ${(props) => props.$active && "700"};
 `;
 
 const Anchor = styled.a`
@@ -39,21 +42,22 @@ const Anchor = styled.a`
 
 const NavAside: FC = () => {
   const pages = PostNavStore.useStore(PostNavStore.pages);
+  const activeSlug = EditorStore.useStore(EditorStore.slug);
 
   return (
     <Aside>
       {pages == null ? (
         <CenteredSpinner />
       ) : (
-        <EmptyUl>
+        <UnstyledUl>
           {pages.map((p) => (
-            <ListItem key={p.slug}>
+            <ListItem key={p.slug} $active={p.slug === activeSlug}>
               <Link href={"/posts/" + p.slug}>
                 <Anchor>{p.title}</Anchor>
               </Link>
             </ListItem>
           ))}
-        </EmptyUl>
+        </UnstyledUl>
       )}
     </Aside>
   );

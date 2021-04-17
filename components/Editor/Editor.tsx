@@ -1,7 +1,7 @@
 import { FC, useEffect } from "react";
 import EditorStore from "~/components/Editor/EditorStore";
 import styled from "styled-components";
-import MarkdownDisplay from "~/components/Editor/MarkdownDisplay";
+import MarkdownDisplay from "~/components/Editor/MarkdownEditor";
 
 //todo: dom purify?
 
@@ -60,19 +60,19 @@ const EditorContainer = styled.div`
 
 //todo: make title first line or header or smth
 
-const Editors: FC<{ slug?: string; post?: string }> = ({ slug, post }) => {
+const Editor: FC<{ slug?: string; post?: string }> = ({ slug, post }) => {
   useEffect(() => {
     EditorStore.setSlug(slug || "");
     EditorStore.setMd(post || "", false);
-  }, []);
+  }, [slug, post]);
 
   return (
     <EditorWrapper>
       <EditorContainer>
-        <MarkdownDisplay />
+        <MarkdownDisplay value={post || ""} />
       </EditorContainer>
     </EditorWrapper>
   );
 };
 
-export default Editors;
+export default Editor;
