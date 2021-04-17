@@ -5,7 +5,6 @@ import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
 
-//todo: classname didn't match
 const Aside = styled.aside`
   flex-grow: 0;
   width: 250px;

@@ -23,7 +23,6 @@ namespace EditorStore {
     slug: ""
   }));
 
-  export const md = (state: EditorState) => state.md;
   export const slug = (state: EditorState) => state.slug;
 
   export const setMd = (md: string, save: boolean = true) => {

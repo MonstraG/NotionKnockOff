@@ -3,8 +3,6 @@ import EditorStore from "~/components/Editor/EditorStore";
 import styled from "styled-components";
 import MarkdownDisplay from "~/components/Editor/MarkdownEditor";
 
-//todo: dom purify?
-
 //todo: download file to local pc
 
 const EditorWrapper = styled.div`
@@ -60,16 +58,16 @@ const EditorContainer = styled.div`
 
 //todo: make title first line or header or smth
 
-const Editor: FC<{ slug?: string; post?: string }> = ({ slug, post }) => {
+const Editor: FC<{ slug: string; post: string }> = ({ slug, post }) => {
   useEffect(() => {
-    EditorStore.setSlug(slug || "");
-    EditorStore.setMd(post || "", false);
+    EditorStore.setSlug(slug);
+    EditorStore.setMd(post, false);
   }, [slug, post]);
 
   return (
     <EditorWrapper>
       <EditorContainer>
-        <MarkdownDisplay value={post || ""} />
+        <MarkdownDisplay value={post} />
       </EditorContainer>
     </EditorWrapper>
   );
