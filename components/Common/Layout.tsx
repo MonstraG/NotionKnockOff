@@ -42,8 +42,6 @@ const Main = styled.main`
   background-color: ${(props) => props.theme.editorBg};
 `;
 
-//todo: theme for styled and common background?
-
 const PageBody = styled.section`
   p:first-child {
     margin-top: 0;
