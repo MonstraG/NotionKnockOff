@@ -1,11 +1,12 @@
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { CenteredSpinner } from "~/components/Common/Spinner";
 import styled from "styled-components";
 import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
 import AddIcon from "~/components/Icons/add";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
+import { Post } from "../../lib/api";
 
 const Aside = styled.aside`
   width: 250px;
@@ -71,17 +72,24 @@ const NavAside: FC = () => {
   const pages = PostNavStore.useStore(PostNavStore.pages);
   const activeSlug = EditorStore.useStore(EditorStore.slug);
   const router = useRouter();
-  //todo: while wetching spin thing
-  // const [addingPage, setAddingPage] = useState(false);
+  const [addingPage, setAddingPage] = useState(false);
 
-  //todo: add title input pre-focused when adding i guess
+  useEffect(() => {
+    const handler = (url: string) => {
+      EditorStore.setSlug(url.replace("/posts/", "").split("?")[0]);
+    };
+    Router.events.on("routeChangeStart", handler);
+    return () => Router.events.off("routeChangeStart", handler);
+  }, []);
 
   const addPage = () => {
+    setAddingPage(true);
     fetch("/api/newPost")
       .then((response) => response.text())
       .then(async (slug) => {
         await refreshPages();
-        router.push("/posts/" + slug);
+        setAddingPage(false);
+        router.push(`/posts/${slug}`);
       });
   };
 
@@ -90,20 +98,23 @@ const NavAside: FC = () => {
   }, []);
 
   const refreshPages = () =>
-    fetch("/api/getPosts?fields=title")
+    fetch("/api/getPosts?fields=title&fields=date")
       .then((response) => response.json())
-      .then((x) => PostNavStore.setPages(x));
+      .then((x) => {
+        const sorted = x.sort((a: Post, b: Post) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        PostNavStore.setPages(sorted);
+      });
 
   return (
     <Aside>
-      {pages == null ? (
+      {pages == null || addingPage ? (
         <CenteredSpinner />
       ) : (
         <>
           <UnstyledUl>
             {pages.map((p) => (
               <ListItem key={p.slug} $active={p.slug === activeSlug}>
-                <Link href={"/posts/" + p.slug}>
+                <Link href={`/posts/${p.slug}`}>
                   <Anchor>{p.title}</Anchor>
                 </Link>
               </ListItem>

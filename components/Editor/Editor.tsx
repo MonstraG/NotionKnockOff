@@ -25,11 +25,10 @@ const EditorContainer = styled.div`
 
 //todo: make title first line or header or smth
 
-const Editor: FC<{ slug: string; post: string }> = ({ slug, post }) => {
+const Editor: FC<{ post: string }> = ({ post }) => {
   useEffect(() => {
-    EditorStore.setSlug(slug);
     EditorStore.setMd(post, false);
-  }, [slug, post]);
+  }, [post]);
 
   return (
     <EditorWrapper>

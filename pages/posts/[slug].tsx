@@ -17,7 +17,7 @@ const PostPage: FC<Props> = ({ post }) => {
     return <ErrorPage statusCode={404} />;
   }
 
-  return <Editor slug={post.slug} post={post.content} />;
+  return <Editor post={post.content} />;
 };
 
 export default PostPage;
