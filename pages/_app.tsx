@@ -4,6 +4,7 @@ import "modern-normalize";
 import { FC } from "react";
 import Layout from "~/components/Common/Layout";
 import { ThemeProvider } from "styled-components";
+import { StylesProvider } from "@material-ui/core";
 
 const theme = {
   editorBg: "#181a1b",
@@ -27,11 +28,13 @@ const MyApp: FC<AppProps> = ({ pageProps, Component }): JSX.Element => (
       <meta name="theme-color" content="#000" />
       <link rel="alternate" type="application/rss+xml" href="/feed.xml" />
     </Head>
-    <ThemeProvider theme={theme}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <StylesProvider injectFirst>
+      <ThemeProvider theme={theme}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ThemeProvider>
+    </StylesProvider>
   </>
 );
 

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getAllPosts, PostFields } from "../../lib/api";
+import { getAllPosts } from "../../lib/api";
+import { PostFields } from "../../lib/helpers";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let fields = ["slug"];

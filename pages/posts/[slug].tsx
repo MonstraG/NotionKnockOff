@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import ErrorPage from "next/error";
-import { getAllPosts, getPostBySlug, Post } from "../../lib/api";
+import { getAllPosts, getPostBySlug } from "../../lib/api";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
 import Editor from "~/components/Editor/Editor";
+import { Post } from "../../lib/helpers";
 
 type Props = {
   post: Post;
@@ -14,7 +14,8 @@ const PostPage: FC<Props> = ({ post }) => {
   const router = useRouter();
 
   if (!router.isFallback && !post?.slug) {
-    return <ErrorPage statusCode={404} />;
+    router.push("/");
+    return null;
   }
 
   return <Editor post={post.content} />;
@@ -31,7 +32,7 @@ export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }):
     return { props: { post: {} as Post } };
   }
 
-  const post = await getPostBySlug(params.slug, ["title", "date", "slug", "content"]);
+  const post = await getPostBySlug(params.slug);
   return {
     props: {
       post
