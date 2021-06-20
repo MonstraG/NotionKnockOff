@@ -1,7 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import matter from "gray-matter";
-import { allFields, PostFields, Post } from "./helpers";
+import { allFields, PostFields, Post, resolveTitle } from "./helpers";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
@@ -57,13 +57,6 @@ date: '${new Date().toISOString()}'
   `;
   return fs.promises.writeFile(getPostPath(slug), attributes + content);
 };
-
-const resolveTitle = (content: string): string => {
-  if (content.trim().length === 0) {
-    return "Untitled";
-  }
-  return content.split("\n")[0].replaceAll("#", "").trim()
-}
 
 export const duplicatePost = async (slug: string): Promise<string> => {
   const duplicatedPost = await getPostRaw(slug);

@@ -23,8 +23,6 @@ const EditorContainer = styled.div`
   }
 `;
 
-//todo: make title first line or header or smth
-
 const Editor: FC<{ post: string }> = ({ post }) => {
   useEffect(() => {
     EditorStore.setMd(post, false);

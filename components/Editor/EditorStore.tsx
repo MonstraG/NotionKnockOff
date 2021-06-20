@@ -1,4 +1,6 @@
 import create from "zustand";
+import PostNavStore from "~/components/Aside/PostNavStore";
+import { resolveTitle } from "../../lib/helpers";
 
 const throttle = (func: Function) => {
   let lastArgs: any[];
@@ -41,8 +43,12 @@ namespace EditorStore {
     await saveToFile(slug, md);
   };
 
-  const saveToFile = async (slug: string, body: string) =>
-    await fetch(`/api/savePost?slug=${slug}`, { body, method: "PUT" });
+  const saveToFile = async (slug: string, body: string) => {
+    //update title
+    PostNavStore.updatePage(slug, resolveTitle(body));
+    //save data
+    return await fetch(`/api/savePost?slug=${slug}`, { body, method: "PUT" });
+  };
 
   export const throttledSave = throttle(save);
 }
