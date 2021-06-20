@@ -1,7 +1,7 @@
 {
-  "name": "test-clickr",
+  "name": "notion-copy",
   "version": "1.0.0",
-  "description": "Test clicker game thingie",
+  "description": "Knock off notion copy thing",
   "main": "N/A",
   "license": "Unlicense",
   "private": true,

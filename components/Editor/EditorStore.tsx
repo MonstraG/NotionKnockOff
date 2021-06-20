@@ -15,13 +15,11 @@ const throttle = (func: Function) => {
 namespace EditorStore {
   type EditorState = {
     md: string; //current editor markdown content
-    title: string;
     slug: string;
   };
 
   export const useStore = create<EditorState>(() => ({
     md: "",
-    title: "",
     slug: ""
   }));
 
@@ -39,15 +37,14 @@ namespace EditorStore {
   export const setSlug = (slug: string) => useStore.setState({ slug });
 
   export const save = async () => {
-    const { slug, title, md } = useStore.getState();
-    await saveToFile(slug, title, md);
+    const { slug, md } = useStore.getState();
+    await saveToFile(slug, md);
   };
 
-  const saveToFile = async (slug: string, title: string, body: string) => {
-    await fetch(`/api/savePost?slug=${slug}?title=${title}`, { body, method: "POST" });
-  };
+  const saveToFile = async (slug: string, body: string) =>
+    await fetch(`/api/savePost?slug=${slug}`, { body, method: "PUT" });
 
-  export const throttledSave = throttle(saveToFile);
+  export const throttledSave = throttle(save);
 }
 
 export default EditorStore;

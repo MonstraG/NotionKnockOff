@@ -45,18 +45,25 @@ export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
 
 export const createNewPost = async (): Promise<string> => {
   const newSlug = await getUniqueSlug();
-  await savePost(newSlug, "Untitled", "");
+  await savePost(newSlug, "");
   return newSlug;
 };
 
-export const savePost = (slug: string, title: string, content: string): Promise<void> => {
+export const savePost = (slug: string, content: string): Promise<void> => {
   const attributes = `---
-title: '${title}'
+title: '${resolveTitle(content)}'
 date: '${new Date().toISOString()}'
 ---\n
   `;
   return fs.promises.writeFile(getPostPath(slug), attributes + content);
 };
+
+const resolveTitle = (content: string): string => {
+  if (content.trim().length === 0) {
+    return "Untitled";
+  }
+  return content.split("\n")[0].replaceAll("#", "").trim()
+}
 
 export const duplicatePost = async (slug: string): Promise<string> => {
   const duplicatedPost = await getPostRaw(slug);

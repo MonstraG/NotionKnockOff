@@ -18,19 +18,20 @@ const Aside = styled.aside`
   flex-shrink: 0;
 `;
 
-const UnstyledUl = styled.ul`
+const PageList = styled.ul`
   padding: 2rem 0 0;
   list-style: none;
   margin: 0;
 `;
 
-const PageTitleContainer = styled.div`
+const PageTitleContainer = styled.span`
   display: flex;
   justify-content: space-between;
   align-items: center;
 `;
 
-const PageActions = styled.div`
+const PageActions = styled.span`
+  display: inline-flex;
   svg {
     fill: ${(props) => props.theme.navText};
     fill-opacity: 0.8;
@@ -41,29 +42,39 @@ const PageActions = styled.div`
 
 const ListItem = styled.li<{ $active?: boolean }>`
   :hover {
-    background-color: rgb(70, 70, 70);
+    background-color: #464646;
   }
+
   transition: all 0.2s;
   cursor: pointer;
   user-select: none;
   font-weight: ${(props) => props.$active && "700"};
+
   :hover {
     ${PageActions} {
       opacity: 1;
     }
   }
+
   ${PageActions} {
     opacity: 0;
   }
+
+  a {
+    text-decoration: none;
+  }
 `;
 
-const Anchor = styled.a`
-  display: block;
-  margin: 0 1rem;
+const Anchor = styled.span`
+  min-width: 0;
+  flex: 1 1 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 1rem;
   padding: 0.4rem 0;
-  text-decoration: none;
   &,
-  &:visited {
+  :visited {
     color: ${(props) => props.theme.navText};
   }
 `;
@@ -95,6 +106,11 @@ const AddContainer = styled.div`
   }
 `;
 
+const refreshPages = () =>
+  fetch("/api/getPosts?fields=title&fields=date")
+    .then((response) => response.json())
+    .then((pages) => PostNavStore.setPages(pages.sort(byDate)));
+
 const NavAside: FC = () => {
   const pages = PostNavStore.useStore(PostNavStore.pages);
   const activeSlug = EditorStore.useStore(EditorStore.slug);
@@ -102,11 +118,12 @@ const NavAside: FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const handler = (url: string) => {
+    const updateSlug = (url: string) => {
       EditorStore.setSlug(url.replace("/posts/", "").split("?")[0]);
     };
-    Router.events.on("routeChangeStart", handler);
-    return () => Router.events.off("routeChangeStart", handler);
+    updateSlug(router.asPath);
+    Router.events.on("routeChangeStart", updateSlug);
+    return () => Router.events.off("routeChangeStart", updateSlug);
   }, []);
 
   const pageAction = (url: string, event?: MouseEvent, slug?: string, redirect?: string) => {
@@ -134,46 +151,43 @@ const NavAside: FC = () => {
     refreshPages();
   }, []);
 
-  const refreshPages = () =>
-    fetch("/api/getPosts?fields=title&fields=date")
-      .then((response) => response.json())
-      .then((pages) => PostNavStore.setPages(pages.sort(byDate)));
-
   return (
     <Aside>
       {pages == null || loading ? (
         <CenteredSpinner />
       ) : (
         <>
-          <UnstyledUl>
+          <PageList>
             {pages.map((p) => (
-              <ListItem key={p.slug} $active={p.slug === activeSlug}>
-                <Link href={`/posts/${p.slug}`}>
-                  <PageTitleContainer>
-                    <Anchor>{p.title}</Anchor>
-                    <PageActions>
-                      <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
-                        <IconButton aria-label="duplicate" size="small">
-                          <FileCopyOutlinedIcon />
-                        </IconButton>
-                      </BootstrapTooltip>
-                      <BootstrapTooltip title="Delete" onClick={deletePage(p.slug)}>
-                        <IconButton aria-label="delete" size="small">
-                          <DeleteOutlinedIcon />
-                        </IconButton>
-                      </BootstrapTooltip>
-                    </PageActions>
-                  </PageTitleContainer>
-                </Link>
-              </ListItem>
-            ))}
-          </UnstyledUl>
-          <ListItem onClick={addPage}>
-            <AddContainer>
-              <AddBoxOutlinedIcon />
-              <span>New Page</span>
-            </AddContainer>
-          </ListItem>
+                <ListItem key={p.slug} $active={p.slug === activeSlug}>
+                  <Link href={`/posts/${p.slug}`}>
+                    <a>
+                      <PageTitleContainer>
+                        <Anchor>{p.title}</Anchor>
+                        <PageActions>
+                          <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
+                            <IconButton aria-label="duplicate" size="small">
+                              <FileCopyOutlinedIcon />
+                            </IconButton>
+                          </BootstrapTooltip>
+                          <BootstrapTooltip title="Delete" onClick={deletePage(p.slug)}>
+                            <IconButton aria-label="delete" size="small">
+                              <DeleteOutlinedIcon />
+                            </IconButton>
+                          </BootstrapTooltip>
+                        </PageActions>
+                      </PageTitleContainer>
+                    </a>
+                  </Link>
+                </ListItem>
+              ))}
+            <ListItem onClick={addPage}>
+              <AddContainer>
+                <AddBoxOutlinedIcon />
+                <span>New Page</span>
+              </AddContainer>
+            </ListItem>
+          </PageList>
         </>
       )}
     </Aside>
