@@ -14,8 +14,8 @@ export const byDate = <T extends { date: string }>(a: T, b: T) => new Date(b.dat
 export const resolveTitle = (content: string): string => {
   const lines = content.split("\n");
   //https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s08.html
-  // This regular expression limits input to letters and numbers from any language or script
-  const predicate = (line: string): string[] | null => line.match(/[\p{L}\p{M}\p{Nd}]+/u);
+  // This regular expression limits input to letters and numbers from any language or script (AND ALSO SPACE)
+  const predicate = (line: string): string[] | null => line.trim().match(/[\p{L}\p{M}\p{Nd} ]+/u);
   const header = findValue(lines, predicate);
   //.length === 0 should not happen but safety first
   if (header == null || header.length === 0) {
