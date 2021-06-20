@@ -159,28 +159,28 @@ const NavAside: FC = () => {
         <>
           <PageList>
             {pages.map((p) => (
-                <ListItem key={p.slug} $active={p.slug === activeSlug}>
-                  <Link href={`/posts/${p.slug}`}>
-                    <a>
-                      <PageTitleContainer>
-                        <Anchor>{p.title}</Anchor>
-                        <PageActions>
-                          <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
-                            <IconButton aria-label="duplicate" size="small">
-                              <FileCopyOutlinedIcon />
-                            </IconButton>
-                          </BootstrapTooltip>
-                          <BootstrapTooltip title="Delete" onClick={deletePage(p.slug)}>
-                            <IconButton aria-label="delete" size="small">
-                              <DeleteOutlinedIcon />
-                            </IconButton>
-                          </BootstrapTooltip>
-                        </PageActions>
-                      </PageTitleContainer>
-                    </a>
-                  </Link>
-                </ListItem>
-              ))}
+              <ListItem key={p.slug} $active={p.slug === activeSlug}>
+                <Link href={`/posts/${p.slug}`}>
+                  <a>
+                    <PageTitleContainer>
+                      <Anchor>{p.title}</Anchor>
+                      <PageActions>
+                        <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
+                          <IconButton aria-label="duplicate" size="small">
+                            <FileCopyOutlinedIcon />
+                          </IconButton>
+                        </BootstrapTooltip>
+                        <BootstrapTooltip title="Delete" onClick={deletePage(p.slug)}>
+                          <IconButton aria-label="delete" size="small">
+                            <DeleteOutlinedIcon />
+                          </IconButton>
+                        </BootstrapTooltip>
+                      </PageActions>
+                    </PageTitleContainer>
+                  </a>
+                </Link>
+              </ListItem>
+            ))}
             <ListItem onClick={addPage}>
               <AddContainer>
                 <AddBoxOutlinedIcon />

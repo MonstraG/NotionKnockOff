@@ -9,7 +9,8 @@ export type PostFields = (keyof Post)[];
 
 export const allFields: (keyof Post)[] = ["title", "date", "slug", "content"];
 
-export const byDate = <T extends { date: string }>(a: T, b: T) => new Date(b.date).getTime() - new Date(a.date).getTime();
+export const byDate = <T extends { date: string }>(a: T, b: T) =>
+  new Date(b.date).getTime() - new Date(a.date).getTime();
 
 export const resolveTitle = (content: string): string => {
   const lines = content.split("\n");
@@ -22,7 +23,7 @@ export const resolveTitle = (content: string): string => {
     return "Untitled";
   }
   return header[0];
-}
+};
 
 //just like find, except returns truthful value
 export const findValue = <T extends any, K extends any>(array: T[], predicate: (el: T) => K): K | undefined => {
@@ -33,4 +34,4 @@ export const findValue = <T extends any, K extends any>(array: T[], predicate: (
     }
   }
   return undefined;
-}
+};

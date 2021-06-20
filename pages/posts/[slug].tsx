@@ -27,7 +27,9 @@ interface Params extends ParsedUrlQuery {
   slug: string;
 }
 
-export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }): Promise<GetStaticPropsResult<Props>> => {
+export const getStaticProps: GetStaticProps<Props, Params> = async ({
+  params
+}): Promise<GetStaticPropsResult<Props>> => {
   if (params?.slug == null) {
     return { props: { post: {} as Post } };
   }
