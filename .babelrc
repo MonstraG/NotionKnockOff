@@ -13,6 +13,9 @@
         "displayName": true,
         "preprocess": false
       }
-    ]
+    ],
+    ["@babel/plugin-transform-runtime", {
+      "regenerator": true
+    }]
   ]
 }
