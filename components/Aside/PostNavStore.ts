@@ -1,5 +1,5 @@
 import create from "zustand";
-import { Post } from "../../lib/helpers";
+import { Post } from "~/lib/helpers";
 
 namespace PostNavStore {
   type PostNavState = {

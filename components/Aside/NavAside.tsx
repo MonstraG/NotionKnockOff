@@ -4,13 +4,13 @@ import styled from "styled-components";
 import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
-import { Router, useRouter } from "next/router";
+import { useRouter } from "next/router";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import { IconButton } from "@material-ui/core";
 import BootstrapTooltip from "~/components/Common/BoostrapTooltip";
-import { byDate } from "../../lib/helpers";
+import { byDate } from "~/lib/helpers";
 
 const Aside = styled.aside`
   width: 250px;
@@ -106,6 +106,10 @@ const AddContainer = styled.div`
   }
 `;
 
+const updateSlug = (url: string) => {
+  EditorStore.setSlug(url.replace("/posts/", "").split("?")[0]);
+};
+
 const refreshPages = () =>
   fetch("/api/getPosts?fields=title&fields=date")
     .then((response) => response.json())
@@ -118,13 +122,8 @@ const NavAside: FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const updateSlug = (url: string) => {
-      EditorStore.setSlug(url.replace("/posts/", "").split("?")[0]);
-    };
     updateSlug(router.asPath);
-    Router.events.on("routeChangeStart", updateSlug);
-    return () => Router.events.off("routeChangeStart", updateSlug);
-  }, []);
+  }, [router.asPath]);
 
   const pageAction = (url: string, event?: MouseEvent, slug?: string, redirect?: string) => {
     //otherwise it would trigger Link navigation

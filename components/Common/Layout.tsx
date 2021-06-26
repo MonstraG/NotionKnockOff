@@ -1,10 +1,10 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import styled from "styled-components";
 import NavAside from "~/components/Aside/NavAside";
-import { useRouter } from "next/router";
 import { Spinner } from "~/components/Common/Spinner";
+import useLoadingOnNavigation from "~/components/Common/useLoadingOnNavigation";
 
-const Main = styled.div`
+const Main = styled.main`
   display: flex;
   flex-direction: row;
   height: 100vh;
@@ -41,25 +41,13 @@ const Main = styled.div`
   }
 `;
 
-const PageBody = styled.section`
+const PageBody = styled.article`
   height: 100%;
   width: 100%;
 `;
 
 const Layout: FC = ({ children }) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    router.events.on("routeChangeStart", () => setLoading(true));
-    router.events.on("routeChangeComplete", () => setLoading(false));
-    router.events.on("routeChangeError", () => setLoading(false));
-    return () => {
-      router.events.off("routeChangeStart", () => setLoading(true));
-      router.events.off("routeChangeComplete", () => setLoading(false));
-      router.events.off("routeChangeError", () => setLoading(false));
-    };
-  }, []);
+  const loading = useLoadingOnNavigation();
 
   return (
     <Main>

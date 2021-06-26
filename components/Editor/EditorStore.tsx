@@ -1,6 +1,6 @@
 import create from "zustand";
 import PostNavStore from "~/components/Aside/PostNavStore";
-import { resolveTitle } from "../../lib/helpers";
+import { resolveTitle } from "~/lib/helpers";
 
 const throttle = (func: Function) => {
   let lastArgs: any[];
