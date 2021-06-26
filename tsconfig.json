@@ -7,7 +7,7 @@
     "baseUrl": ".",
     "paths": {
       "~/components/*": ["components/*"],
-      "~/utils/*": ["utils/*"]
+      "~/lib/*": ["lib/*"]
     },
     "moduleResolution": "node",
     "strict": true,
