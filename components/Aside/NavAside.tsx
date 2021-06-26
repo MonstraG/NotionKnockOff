@@ -1,5 +1,5 @@
 import { FC, MouseEvent, useEffect, useState } from "react";
-import { CenteredSpinner } from "~/components/Common/Spinner";
+import { Spinner } from "~/components/Common/Spinner";
 import styled from "styled-components";
 import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
@@ -154,7 +154,7 @@ const NavAside: FC = () => {
   return (
     <Aside>
       {pages == null || loading ? (
-        <CenteredSpinner />
+        <Spinner />
       ) : (
         <>
           <PageList>

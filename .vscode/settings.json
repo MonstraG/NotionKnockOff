@@ -3,7 +3,7 @@
   "editor.insertSpaces": true,
   "editor.renderWhitespace": "boundary",
   "editor.rulers": [
-    140
+    120
   ],
   "editor.formatOnSave": true,
   "files.encoding": "utf8",
@@ -12,7 +12,8 @@
   "search.exclude": {
     "out/**": true,
     ".next/**": true,
-    "node_modules/**": true
+    "node_modules/**": true,
+    "_posts/**": true
   },
   "[javascript]": {
     "editor.formatOnSave": true

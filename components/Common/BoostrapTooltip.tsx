@@ -1,6 +1,8 @@
 import { makeStyles, Theme, Tooltip, TooltipProps } from "@material-ui/core";
 import { FC } from "react";
 
+//todo: replace with styled components
+
 const useStylesBootstrap = makeStyles((theme: Theme) => ({
   arrow: {
     color: theme.palette.common.black

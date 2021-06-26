@@ -1,7 +1,7 @@
 {
-  "name": "notion-copy",
-  "version": "1.0.0",
-  "description": "Knock off notion copy thing",
+  "name": "notioutline",
+  "version": "1.1.0",
+  "description": "Knock off notion copy thing made with outline's editor",
   "main": "N/A",
   "license": "Unlicense",
   "private": true,
