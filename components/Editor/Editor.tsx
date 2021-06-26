@@ -18,8 +18,23 @@ const EditorWrapper = styled.div`
 const EditorContainer = styled.div`
   width: 21cm; //a4 width
   max-width: calc(100% - 2rem);
+
   .editor {
     padding: 15vh 0 30vh;
+
+    .notice-block {
+      background: transparent;
+      color: ${({ theme }) => theme.text};
+      &.tip {
+        box-shadow: 0 0 0 1px #9e5cf7 inset;
+      }
+      &.warning {
+        box-shadow: 0 0 0 1px #f5be31 inset;
+      }
+      &.info {
+        box-shadow: 0 0 0 1px #ff5c80 inset;
+      }
+    }
   }
 `;
 

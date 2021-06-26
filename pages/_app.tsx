@@ -9,7 +9,8 @@ import { StylesProvider } from "@material-ui/core";
 const theme = {
   editorBg: "#181a1b",
   scrollbar: "#646464",
-  navText: "rgba(255, 255, 255, 0.6)"
+  navText: "rgba(255, 255, 255, 0.6)",
+  text: "#e6e6e6"
 };
 
 const MyApp: FC<AppProps> = ({ pageProps, Component }): JSX.Element => (
