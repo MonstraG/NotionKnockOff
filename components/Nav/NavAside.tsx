@@ -27,7 +27,7 @@ export const StyledAside = styled.aside`
       margin-right: 0.3rem;
     }
     svg {
-      fill: ${(props) => props.theme.navText};
+      fill: ${({ theme }) => theme.navText};
       fill-opacity: 0.8;
     }
   }

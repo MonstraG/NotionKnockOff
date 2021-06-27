@@ -15,7 +15,7 @@ const Nav = styled.nav<{ $hidden: boolean }>`
       margin-right: 0.3rem;
     }
     svg {
-      fill: ${(props) => props.theme.navText};
+      fill: ${({ theme }) => theme.navText};
       fill-opacity: 0.8;
     }
   }

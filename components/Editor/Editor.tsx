@@ -11,7 +11,7 @@ const EditorWrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 1rem; //always present padding
-  background-color: ${(props) => props.theme.editorBg};
+  background-color: ${({ theme }) => theme.editorBg};
 `;
 
 const EditorContainer = styled.div`
