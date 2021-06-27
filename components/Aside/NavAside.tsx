@@ -16,6 +16,16 @@ const Aside = styled.aside`
   width: 250px;
   background-color: #333;
   flex-shrink: 0;
+
+  .MuiIconButton-root {
+    :last-of-type {
+      margin-right: 0.3rem;
+    }
+    svg {
+      fill: ${(props) => props.theme.navText};
+      fill-opacity: 0.8;
+    }
+  }
 `;
 
 const PageList = styled.ul`
@@ -30,85 +40,63 @@ const PageTitleContainer = styled.span`
   align-items: center;
 `;
 
+const AddPageContainer = styled(PageTitleContainer)`
+  justify-content: flex-start;
+`;
+
 const PageActions = styled.span`
-  display: inline-flex;
-  svg {
-    fill: ${(props) => props.theme.navText};
-    fill-opacity: 0.8;
-  }
-  margin: 0 0.3rem;
+  display: flex;
   transition: all 0.3s;
+  opacity: 0;
+`;
+
+const AddLabel = styled.label`
+  opacity: 0;
+  transition: all 0.3s;
+  padding: 0.25rem 0;
 `;
 
 const ListItem = styled.li<{ $active?: boolean }>`
+  padding-left: 1rem;
+
   :hover {
     background-color: #464646;
   }
 
+  color: ${({ theme }) => theme.navText} !important;
   transition: all 0.2s;
   cursor: pointer;
   user-select: none;
-  font-weight: ${(props) => props.$active && "700"};
+  font-weight: ${({ $active }) => $active && "600"};
 
   :hover {
     ${PageActions} {
       opacity: 1;
     }
-  }
-
-  ${PageActions} {
-    opacity: 0;
+    ${AddLabel} {
+      opacity: 1;
+    }
   }
 
   a {
     text-decoration: none;
+    &,
+    :visited,
+    :active,
+    :hover {
+      color: ${({ theme }) => theme.navText};
+    }
   }
 `;
 
-const Anchor = styled.span`
-  min-width: 0;
-  flex: 1 1 0;
+const Title = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-left: 1rem;
   padding: 0.4rem 0;
-  &,
-  :visited {
-    color: ${(props) => props.theme.navText};
-  }
 `;
 
-const AddContainer = styled.div`
-  margin-left: 0.9rem;
-  padding: 0.25rem 0;
-  display: flex;
-  align-items: center;
-  color: ${(props) => props.theme.navText};
-  svg {
-    fill: ${(props) => props.theme.navText};
-    fill-opacity: 0.8;
-    margin-right: 0.3rem;
-  }
-  span {
-    transition: all 0.3s;
-    margin-bottom: 2px;
-  }
-  :hover {
-    span {
-      opacity: 1;
-    }
-  }
-  :not(:hover) {
-    span {
-      opacity: 0;
-    }
-  }
-`;
-
-const updateSlug = (url: string) => {
-  EditorStore.setSlug(url.replace("/posts/", "").split("?")[0]);
-};
+const updateSlug = (url: string) => EditorStore.setSlug(url.replace("/posts/", ""));
 
 const refreshPages = () =>
   fetch("/api/getPosts?fields=title&fields=date")
@@ -135,8 +123,8 @@ const NavAside: FC = () => {
     setLoading(true);
     fetch(`/api/${url}${slug ? "?slug=" + slug : ""}`)
       .then((response) => (response.ok ? response.text() : "/"))
-      .then(async (slug) => {
-        await refreshPages();
+      .then((slug) => {
+        refreshPages();
         setLoading(false);
         router.push(redirect || `/posts/${slug}`);
       });
@@ -162,7 +150,7 @@ const NavAside: FC = () => {
                 <Link href={`/posts/${p.slug}`}>
                   <a>
                     <PageTitleContainer>
-                      <Anchor>{p.title}</Anchor>
+                      <Title>{p.title}</Title>
                       <PageActions>
                         <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
                           <IconButton aria-label="duplicate" size="small">
@@ -181,10 +169,12 @@ const NavAside: FC = () => {
               </ListItem>
             ))}
             <ListItem onClick={addPage}>
-              <AddContainer>
-                <AddBoxOutlinedIcon />
-                <span>New Page</span>
-              </AddContainer>
+              <AddPageContainer>
+                <IconButton aria-label="add" size="small" edge="start">
+                  <AddBoxOutlinedIcon />
+                </IconButton>
+                <AddLabel>New Page</AddLabel>
+              </AddPageContainer>
             </ListItem>
           </PageList>
         </>
