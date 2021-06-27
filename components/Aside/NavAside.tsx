@@ -1,6 +1,6 @@
 import { FC, MouseEvent, useEffect, useState } from "react";
 import { Spinner } from "~/components/Common/Spinner";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Link from "next/link";
 import PostNavStore from "~/components/Aside/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
@@ -11,6 +11,10 @@ import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import { IconButton } from "@material-ui/core";
 import BootstrapTooltip from "~/components/Common/BoostrapTooltip";
 import { byDate } from "~/lib/helpers";
+
+const listItemLabelPadding = css`
+  padding: 0 0.4rem;
+`;
 
 const Aside = styled.aside`
   width: 250px;
@@ -46,14 +50,12 @@ const AddPageContainer = styled(PageTitleContainer)`
 
 const PageActions = styled.span`
   display: flex;
-  transition: all 0.3s;
   opacity: 0;
 `;
 
 const AddLabel = styled.label`
   opacity: 0;
-  transition: all 0.3s;
-  padding: 0.25rem 0;
+  ${listItemLabelPadding}
 `;
 
 const ListItem = styled.li<{ $active?: boolean }>`
@@ -64,7 +66,6 @@ const ListItem = styled.li<{ $active?: boolean }>`
   }
 
   color: ${({ theme }) => theme.navText} !important;
-  transition: all 0.2s;
   cursor: pointer;
   user-select: none;
   font-weight: ${({ $active }) => $active && "600"};
@@ -87,13 +88,18 @@ const ListItem = styled.li<{ $active?: boolean }>`
       color: ${({ theme }) => theme.navText};
     }
   }
+
+  &,
+  * {
+    transition: all 0.3s;
+  }
 `;
 
-const Title = styled.span`
+const Title = styled.label`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: 0.4rem 0;
+  ${listItemLabelPadding}
 `;
 
 const updateSlug = (url: string) => EditorStore.setSlug(url.replace("/posts/", ""));
