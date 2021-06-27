@@ -7,12 +7,11 @@ import MarkdownEditor from "~/components/Editor/MarkdownEditor";
 
 const EditorWrapper = styled.div`
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   padding: 1rem; //always present padding
   background-color: ${(props) => props.theme.editorBg};
-  overflow-y: scroll;
 `;
 
 const EditorContainer = styled.div`

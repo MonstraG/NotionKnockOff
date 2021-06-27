@@ -44,6 +44,7 @@ const Main = styled.main`
 const PageBody = styled.article`
   height: 100%;
   width: 100%;
+  overflow: scroll;
 `;
 
 const Layout: FC = ({ children }) => {
