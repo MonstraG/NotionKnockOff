@@ -3,6 +3,7 @@ import styled from "styled-components";
 import NavAside from "~/components/Aside/NavAside";
 import { Spinner } from "~/components/Common/Spinner";
 import useLoadingOnNavigation from "~/components/Common/useLoadingOnNavigation";
+import NavBar from "~/components/NavBar";
 
 const Main = styled.main`
   display: flex;
@@ -52,6 +53,7 @@ const Layout: FC = ({ children }) => {
 
   return (
     <Main>
+      <NavBar />
       <NavAside />
       <PageBody>{loading ? <Spinner /> : children}</PageBody>
     </Main>

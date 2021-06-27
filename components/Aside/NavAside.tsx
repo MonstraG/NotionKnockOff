@@ -13,7 +13,7 @@ import BootstrapTooltip from "~/components/Common/BoostrapTooltip";
 import { byDate } from "~/lib/helpers";
 
 const listItemLabelPadding = css`
-  padding: 0 0.4rem;
+  padding: 0.4rem 0;
 `;
 
 const Aside = styled.aside`
