@@ -9,7 +9,7 @@ import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
 import AddBoxOutlinedIcon from "@material-ui/icons/AddBoxOutlined";
 import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import { IconButton } from "@material-ui/core";
-import BootstrapTooltip from "~/components/Common/BoostrapTooltip";
+import ArrowTooltip from "~/components/Common/ArrowTooltip";
 import { byDate } from "~/lib/helpers";
 import useMobileContext from "~/components/Common/MobileContext/useMobileContext";
 
@@ -54,7 +54,7 @@ const PageActions = styled.span`
   opacity: 0;
 `;
 
-const AddLabel = styled.label`
+const AddLabel = styled.span`
   opacity: 0;
   ${listItemLabelPadding}
 `;
@@ -106,7 +106,7 @@ const ListItem = styled.li<{ $active?: boolean; $mobile: boolean }>`
   }
 `;
 
-const Title = styled.label`
+const Title = styled.span`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,16 +171,16 @@ const NavAside: FC = () => {
                     <PageTitleContainer>
                       <Title>{p.title}</Title>
                       <PageActions>
-                        <BootstrapTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
+                        <ArrowTooltip title="Duplicate" onClick={duplicatePage(p.slug)}>
                           <IconButton aria-label="duplicate" size="small">
                             <FileCopyOutlinedIcon />
                           </IconButton>
-                        </BootstrapTooltip>
-                        <BootstrapTooltip title="Delete" onClick={deletePage(p.slug)}>
+                        </ArrowTooltip>
+                        <ArrowTooltip title="Delete" onClick={deletePage(p.slug)}>
                           <IconButton aria-label="delete" size="small">
                             <DeleteOutlinedIcon />
                           </IconButton>
-                        </BootstrapTooltip>
+                        </ArrowTooltip>
                       </PageActions>
                     </PageTitleContainer>
                   </a>

@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { FC } from "react";
 
 const SpinnerStyled = styled.div`
   border-radius: 50%;
@@ -29,7 +30,7 @@ const Centered = styled.div`
   width: 100%;
 `;
 
-export const Spinner = () => (
+export const Spinner: FC = () => (
   <Centered>
     <SpinnerStyled />
   </Centered>
