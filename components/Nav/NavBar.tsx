@@ -2,8 +2,9 @@ import { FC } from "react";
 import styled from "styled-components";
 import MenuIcon from "@material-ui/icons/Menu";
 import { IconButton } from "@material-ui/core";
+import useMobileContext from "~/components/Common/MobileContext/useMobileContext";
 
-const Nav = styled.nav`
+const Nav = styled.nav<{ $hidden: boolean }>`
   width: 100%;
   border-bottom: 1px solid #333;
   position: fixed;
@@ -18,12 +19,18 @@ const Nav = styled.nav`
       fill-opacity: 0.8;
     }
   }
+  display: ${({ $hidden }) => $hidden && "none"};
 `;
 
-const NavBar: FC = () => {
+type Props = {
+  openAside: () => void;
+};
+
+const NavBar: FC<Props> = ({ openAside }) => {
+  const mobile = useMobileContext();
   return (
-    <Nav>
-      <IconButton aria-label="menu" size="small" edge="start">
+    <Nav $hidden={!mobile}>
+      <IconButton aria-label="menu" size="small" edge="start" onClick={openAside}>
         <MenuIcon />
       </IconButton>
     </Nav>

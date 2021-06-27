@@ -1,9 +1,9 @@
 import { FC } from "react";
 import styled from "styled-components";
-import NavAside from "~/components/Aside/NavAside";
 import { Spinner } from "~/components/Common/Spinner";
 import useLoadingOnNavigation from "~/components/Common/useLoadingOnNavigation";
-import NavBar from "~/components/NavBar";
+import { MobileContextProvider } from "~/components/Common/MobileContext/MobileContext";
+import Nav from "~/components/Nav/Nav";
 
 const Main = styled.main`
   display: flex;
@@ -11,12 +11,12 @@ const Main = styled.main`
   height: 100vh;
   overflow: hidden;
 
-  background-color: ${(props) => props.theme.editorBg};
+  background-color: ${({ theme }) => theme.editorBg};
 
   * {
     scrollbar-width: thin;
-    scrollbar-base-color: ${(props) => props.theme.scrollbar};
-    scrollbar-shadow-color: ${(props) => props.theme.scrollbar};
+    scrollbar-base-color: ${({ theme }) => theme.scrollbar};
+    scrollbar-shadow-color: ${({ theme }) => theme.scrollbar};
 
     ::-webkit-scrollbar {
       width: 8px;
@@ -28,15 +28,15 @@ const Main = styled.main`
     }
 
     ::-webkit-scrollbar-track {
-      background-color: ${(props) => props.theme.scrollbar};
+      background-color: ${({ theme }) => theme.scrollbar};
     }
 
     ::-webkit-scrollbar-track-piece {
-      background-color: ${(props) => props.theme.editorBg};
+      background-color: ${({ theme }) => theme.editorBg};
     }
 
     ::-webkit-scrollbar-thumb {
-      background-color: ${(props) => props.theme.scrollbar};
+      background-color: ${({ theme }) => theme.scrollbar};
       border-radius: 3px;
     }
   }
@@ -50,12 +50,12 @@ const PageBody = styled.article`
 
 const Layout: FC = ({ children }) => {
   const loading = useLoadingOnNavigation();
-
   return (
     <Main>
-      <NavBar />
-      <NavAside />
-      <PageBody>{loading ? <Spinner /> : children}</PageBody>
+      <MobileContextProvider>
+        <Nav />
+        <PageBody>{loading ? <Spinner /> : children}</PageBody>
+      </MobileContextProvider>
     </Main>
   );
 };

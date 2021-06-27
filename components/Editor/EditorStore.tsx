@@ -1,5 +1,5 @@
 import create from "zustand";
-import PostNavStore from "~/components/Aside/PostNavStore";
+import PostNavStore from "~/components/Nav/PostNavStore";
 import { resolveTitle } from "~/lib/helpers";
 
 const throttle = (func: Function) => {

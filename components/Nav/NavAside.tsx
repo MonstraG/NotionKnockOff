@@ -2,7 +2,7 @@ import { FC, MouseEvent, useEffect, useState } from "react";
 import { Spinner } from "~/components/Common/Spinner";
 import styled, { css } from "styled-components";
 import Link from "next/link";
-import PostNavStore from "~/components/Aside/PostNavStore";
+import PostNavStore from "~/components/Nav/PostNavStore";
 import EditorStore from "~/components/Editor/EditorStore";
 import { useRouter } from "next/router";
 import DeleteOutlinedIcon from "@material-ui/icons/DeleteOutlined";
@@ -16,7 +16,7 @@ const listItemLabelPadding = css`
   padding: 0.4rem 0;
 `;
 
-const Aside = styled.aside`
+export const StyledAside = styled.aside`
   width: 250px;
   background-color: #333;
   flex-shrink: 0;
@@ -145,7 +145,7 @@ const NavAside: FC = () => {
   }, []);
 
   return (
-    <Aside>
+    <StyledAside>
       {pages == null || loading ? (
         <Spinner />
       ) : (
@@ -185,7 +185,7 @@ const NavAside: FC = () => {
           </PageList>
         </>
       )}
-    </Aside>
+    </StyledAside>
   );
 };
 
