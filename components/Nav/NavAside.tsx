@@ -11,6 +11,7 @@ import FileCopyOutlinedIcon from "@material-ui/icons/FileCopyOutlined";
 import { IconButton } from "@material-ui/core";
 import BootstrapTooltip from "~/components/Common/BoostrapTooltip";
 import { byDate } from "~/lib/helpers";
+import useMobileContext from "~/components/Common/MobileContext/useMobileContext";
 
 const listItemLabelPadding = css`
   padding: 0.4rem 0;
@@ -58,7 +59,7 @@ const AddLabel = styled.label`
   ${listItemLabelPadding}
 `;
 
-const ListItem = styled.li<{ $active?: boolean }>`
+const ListItem = styled.li<{ $active?: boolean; $mobile: boolean }>`
   padding-left: 1rem;
 
   :hover {
@@ -78,6 +79,16 @@ const ListItem = styled.li<{ $active?: boolean }>`
       opacity: 1;
     }
   }
+  ${({ $mobile }) =>
+    $mobile &&
+    css`
+      ${PageActions} {
+        opacity: 1;
+      }
+      ${AddLabel} {
+        opacity: 1;
+      }
+    `};
 
   a {
     text-decoration: none;
@@ -110,6 +121,8 @@ const refreshPages = () =>
     .then((pages) => PostNavStore.setPages(pages.sort(byDate)));
 
 const NavAside: FC = () => {
+  const mobile = useMobileContext();
+
   const pages = PostNavStore.useStore(PostNavStore.pages);
   const activeSlug = EditorStore.useStore(EditorStore.slug);
   const router = useRouter();
@@ -152,7 +165,7 @@ const NavAside: FC = () => {
         <>
           <PageList>
             {pages.map((p) => (
-              <ListItem key={p.slug} $active={p.slug === activeSlug}>
+              <ListItem key={p.slug} $active={p.slug === activeSlug} $mobile={mobile}>
                 <Link href={`/posts/${p.slug}`}>
                   <a>
                     <PageTitleContainer>
@@ -174,7 +187,7 @@ const NavAside: FC = () => {
                 </Link>
               </ListItem>
             ))}
-            <ListItem onClick={addPage}>
+            <ListItem onClick={addPage} $mobile={mobile}>
               <AddPageContainer>
                 <IconButton aria-label="add" size="small" edge="start">
                   <AddBoxOutlinedIcon />

@@ -8,6 +8,7 @@ export const MobileContextProvider: FC = ({ children }) => {
   useEffect(() => {
     if (window) {
       const onResize = () => setMobile(window.innerWidth < 768);
+      onResize();
       window.addEventListener("resize", onResize);
       return () => window.removeEventListener("resize", onResize);
     }
