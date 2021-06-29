@@ -31,7 +31,6 @@ const MarkdownEditor: FC<{ value: string }> = ({ value }) => (
     dark
     onSave={(_) => EditorStore.save()}
     onChange={(v) => EditorStore.setMd(v())}
-    className="editor"
     extensions={[]}
     readOnly={false}
     autoFocus
