@@ -7,8 +7,14 @@ const postsDirectory = join(process.cwd(), "_posts");
 
 const getPostPath = (slug: string): string => join(process.cwd(), "_posts", `${slug}.md`);
 
+// will check for _posts exists tru stats and create it if fails
 export const getPostSlugs = (): Promise<string[]> =>
-  fs.promises.readdir(postsDirectory).then((filenames) => filenames.map((file) => file.replace(".md", "")));
+  fs.promises
+    .stat(postsDirectory)
+    .catch((error) => error && fs.promises.mkdir(postsDirectory))
+    .then(() =>
+      fs.promises.readdir(postsDirectory).then((filenames) => filenames.map((file) => file.replace(".md", "")))
+    );
 
 export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Post> => {
   const fullPath = getPostPath(slug);
