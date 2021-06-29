@@ -5,7 +5,7 @@ import { allFields, PostFields, Post, resolveTitle } from "./helpers";
 
 const postsDirectory = join(process.cwd(), "_posts");
 
-const getPostPath = (slug: string): string => join(process.cwd(), "_posts", `${slug}.md`);
+const getPostPath = (slug: string): string => join(postsDirectory, `${slug}.md`);
 
 // will check for _posts exists tru stats and create it if fails
 export const getPostSlugs = (): Promise<string[]> =>

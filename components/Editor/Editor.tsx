@@ -4,6 +4,7 @@ import styled from "styled-components";
 import MarkdownEditor from "~/components/Editor/MarkdownEditor";
 
 //todo: download file to local pc
+//todo: make sure save happens even if clicked away fast enough (save on navig?)
 
 const EditorWrapper = styled.div`
   width: 100%;
