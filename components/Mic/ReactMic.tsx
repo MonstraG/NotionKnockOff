@@ -4,6 +4,8 @@
 // distortion curve for the waveshaper, thanks to Kevin Ennis
 // http://stackoverflow.com/questions/22312841/waveshaper-node-in-webaudio-how-to-emulate-distortion
 
+// basically, ts copy of https://github.com/hackingbeauty/react-mic with changes here and there.
+
 import { createRef, FC, useEffect } from "react";
 import { MicrophoneRecorder, MicrophoneRecorderParams } from "~/components/Mic/lib/MicrophoneRecorder";
 import AudioPlayer from "~/components/Mic/lib/AudioPlayer";

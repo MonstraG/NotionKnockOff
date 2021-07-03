@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { deletePost } from "~/lib/mdApi";
+import { savePost } from "~/lib/postApi";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  await deletePost(req.query.slug.toString());
+  await savePost(req.query.slug?.toString(), req.body);
   res.status(200).end();
 }

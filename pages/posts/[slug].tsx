@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { getAllPosts, getPostBySlug } from "~/lib/mdApi";
+import { getAllPosts, getPostBySlug } from "~/lib/postApi";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";

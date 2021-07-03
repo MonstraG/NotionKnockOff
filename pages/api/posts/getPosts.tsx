@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getAllPosts } from "~/lib/mdApi";
+import { getAllPosts } from "~/lib/postApi";
 import { PostFields } from "~/lib/helpers";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let fields = ["slug"];
+  let fields = ["slug"]; //always include slug
   if (typeof req.query.fields === "string") {
     fields.push(req.query.fields);
   }
