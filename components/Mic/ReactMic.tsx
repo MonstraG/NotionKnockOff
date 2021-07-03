@@ -4,37 +4,20 @@
 // distortion curve for the waveshaper, thanks to Kevin Ennis
 // http://stackoverflow.com/questions/22312841/waveshaper-node-in-webaudio-how-to-emulate-distortion
 
-import { createRef, FC, useEffect, useState } from "react";
+import { createRef, FC, useEffect } from "react";
 import { MicrophoneRecorder, MicrophoneRecorderParams } from "~/components/Mic/lib/MicrophoneRecorder";
 import AudioPlayer from "~/components/Mic/lib/AudioPlayer";
-import Visualizer from "~/components/Mic/lib/Visualizer";
-
-type VisualType = "sinewave" | "frequencyBars" | "frequencyCircles";
+import Visualizer, { VisualizerParams } from "~/components/Mic/lib/Visualizer";
 
 type Props = {
   record: boolean;
-
-  backgroundColor?: string;
-  strokeColor?: string;
   className?: string;
-
-  width?: number;
-  height?: number;
-  visualSetting?: VisualType;
-
+  visualizerParams?: VisualizerParams;
   recorderParams?: MicrophoneRecorderParams;
   audioElem?: HTMLMediaElement;
 };
 
-type MicState = {
-  microphoneRecorder?: any;
-  canvas: HTMLCanvasElement | null;
-  canvasCtx: CanvasRenderingContext2D | null;
-};
-
 const Mic: FC<Props> = ({
-  backgroundColor = "rgba(255, 255, 255, 0.5)",
-  strokeColor = "#000000",
   className = "visualizer",
   recorderParams = {
     mediaOptions: {
@@ -48,68 +31,40 @@ const Mic: FC<Props> = ({
       channelCount: 2
     }
   },
+  visualizerParams = {
+    width: 250,
+    height: 100,
+    backgroundColor: "rgba(255, 255, 255, 0.5)",
+    strokeColor: "#000000",
+    visualizationType: "sinewave"
+  },
   record = false,
-  width = 640,
-  height = 100,
-  visualSetting = "sinewave",
   audioElem
 }) => {
   const visualizerRef = createRef<HTMLCanvasElement>();
-  const [recorder, setRecorder] = useState<MicrophoneRecorder>(new MicrophoneRecorder(recorderParams));
-  useEffect(() => {
-    setRecorder(new MicrophoneRecorder(recorderParams));
-  }, [recorderParams]);
-  const [state, setState] = useState<MicState>({
-    microphoneRecorder: null,
-    canvas: null,
-    canvasCtx: null
-  });
 
   useEffect(() => {
-    if (recorder) {
-      if (record) {
-        recorder.startRecording();
-        return;
-      }
-
-      recorder.stopRecording();
-      state.canvasCtx?.clearRect(0, 0, width, height);
+    if (record) {
+      const recorder = new MicrophoneRecorder(recorderParams);
+      recorder.startRecording();
+      return () => recorder.stopRecording();
     }
-  }, [state.canvasCtx, recorder, record, width, height]);
+  }, [recorderParams, record]);
 
   useEffect(() => {
-    if (visualizerRef.current) {
+    if (visualizerRef.current != null) {
       if (audioElem) {
         AudioPlayer.create(audioElem);
       }
-      const canvas = visualizerRef.current;
-      setState({
-        canvas,
-        canvasCtx: canvas?.getContext("2d")
+      Visualizer.visualize({
+        canvas: visualizerRef.current,
+        canvasCtx: visualizerRef.current.getContext("2d"),
+        ...visualizerParams
       });
     }
-  }, [audioElem, visualizerRef]);
+  }, [visualizerParams, visualizerRef, audioElem]);
 
-  useEffect(() => {
-    if (state.canvas != null) {
-      const params = {
-        canvasCtx: state.canvasCtx,
-        canvas: state.canvas,
-        width: width,
-        height: height,
-        backgroundColor: backgroundColor,
-        strokeColor: strokeColor
-      };
-      if (visualSetting === "sinewave") {
-        Visualizer.visualizeSineWave(params);
-      } else if (visualSetting === "frequencyBars") {
-        Visualizer.visualizeFrequencyBars(params);
-      } else if (visualSetting === "frequencyCircles") {
-        Visualizer.visualizeFrequencyCircles(params);
-      }
-    }
-  }, [backgroundColor, height, state, strokeColor, visualSetting, width]);
-
+  const { width, height } = visualizerParams;
   return <canvas ref={visualizerRef} height={height} width={width} className={className} />;
 };
 

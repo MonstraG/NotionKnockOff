@@ -9,9 +9,27 @@ const ActualMic: FC = () => {
   return (
     <>
       <Button onClick={toggleRecord} variant="contained">
-        {record ? "Start recording" : "stop recording"}
+        {record ? "Stop recording" : "Start recording"}
       </Button>
-      <ReactMic record={record} />
+      <ReactMic
+        record={record}
+        recorderParams={{
+          mediaOptions: {
+            audioBitsPerSecond: 128000,
+            mimeType: "audio/webm;codecs=opus"
+          },
+          soundOptions: {
+            echoCancellation: false,
+            autoGainControl: false,
+            noiseSuppression: false,
+            channelCount: 2
+          },
+          // onData: (blob) => console.log("blob", blob),
+          onSave: (blobData) => console.log("Save blobData", blobData),
+          onStop: (blobData) => console.log("Stop blobData", blobData),
+          onStart: () => console.log("start")
+        }}
+      />
     </>
   );
 };

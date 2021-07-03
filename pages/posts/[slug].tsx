@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { getAllPosts, getPostBySlug } from "../../lib/api";
+import { getAllPosts, getPostBySlug } from "~/lib/mdApi";
 import { FC } from "react";
 import { GetStaticProps, GetStaticPropsResult } from "next";
 import { ParsedUrlQuery } from "querystring";
 import Editor from "~/components/Editor/Editor";
-import { Post } from "../../lib/helpers";
+import { Post } from "~/lib/helpers";
 
 type Props = {
   post: Post;

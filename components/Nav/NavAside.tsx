@@ -12,6 +12,7 @@ import { IconButton } from "@material-ui/core";
 import ArrowTooltip from "~/components/Common/ArrowTooltip";
 import { byDate } from "~/lib/helpers";
 import useMobileContext from "~/components/Common/MobileContext/useMobileContext";
+import ActualMic from "~/components/Mic/ActualMic";
 
 const listItemLabelPadding = css`
   padding: 0.4rem 0;
@@ -198,6 +199,7 @@ const NavAside: FC = () => {
           </PageList>
         </>
       )}
+      <ActualMic />
     </StyledAside>
   );
 };

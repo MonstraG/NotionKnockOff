@@ -1,27 +1,53 @@
 import AudioContextObject from "./AudioContextObject";
 
-interface VisualizerParams {
+export type VisualizerParams = {
+  width: number;
+  height: number;
+  backgroundColor: string;
+  strokeColor: string;
+  visualizationType: VisualizationType;
+};
+
+type VisualizeProps = VisualizerParams & {
   canvasCtx: any;
   canvas: any;
-  width: any;
-  height: any;
-  backgroundColor: any;
-  strokeColor: any;
-}
+};
+
+type VisualizationStyleProps = Omit<VisualizeProps, "visualizationType">;
+
+export type VisualizationType = "sinewave" | "frequencyBars" | "frequencyCircles";
 
 const Visualizer = {
-  visualizeSineWave({ canvasCtx, canvas, width, height, backgroundColor, strokeColor }: VisualizerParams) {
+  visualize({ visualizationType, ...props }: VisualizeProps) {
+    if (visualizationType === "sinewave") {
+      Visualizer.visualizeSineWave(props);
+    }
+    if (visualizationType === "frequencyBars") {
+      Visualizer.visualizeFrequencyBars(props);
+    }
+    if (visualizationType === "frequencyCircles") {
+      Visualizer.visualizeFrequencyCircles(props);
+    }
+  },
+
+  visualizeSineWave({ canvasCtx, canvas, width, height, backgroundColor, strokeColor }: VisualizationStyleProps) {
     let analyser = AudioContextObject.getAnalyser();
+    if (analyser == null) {
+      console.log("VISUALIZER: WARN: attempt to visualize with undefined analyzer");
+      return;
+    }
 
     const bufferLength = analyser.fftSize;
     const dataArray = new Uint8Array(bufferLength);
 
     canvasCtx.clearRect(0, 0, width, height);
 
-    function draw() {
-      requestAnimationFrame(draw);
-
+    requestAnimationFrame(() => {
       analyser = AudioContextObject.getAnalyser();
+      if (analyser == null) {
+        console.log("VISUALIZER: WARN: attempt to visualize with undefined analyzer");
+        return;
+      }
 
       analyser.getByteTimeDomainData(dataArray);
 
@@ -33,7 +59,7 @@ const Visualizer = {
 
       canvasCtx.beginPath();
 
-      const sliceWidth = (width * 1.0) / bufferLength;
+      const sliceWidth = width / bufferLength;
       let x = 0;
 
       for (let i = 0; i < bufferLength; i++) {
@@ -51,24 +77,27 @@ const Visualizer = {
 
       canvasCtx.lineTo(canvas.width, canvas.height / 2);
       canvasCtx.stroke();
-    }
-
-    draw();
+    });
   },
 
-  visualizeFrequencyBars({ canvasCtx, width, height, backgroundColor, strokeColor }: VisualizerParams) {
-    // const self = this;
+  visualizeFrequencyBars({ canvasCtx, width, height, backgroundColor, strokeColor }: VisualizationStyleProps) {
     let analyser = AudioContextObject.getAnalyser();
+    if (analyser == null) {
+      console.log("VISUALIZER: WARN: attempt to visualize with undefined analyzer");
+      return;
+    }
     analyser.fftSize = 256;
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
     canvasCtx.clearRect(0, 0, width, height);
 
-    function draw() {
-      requestAnimationFrame(draw);
-
+    requestAnimationFrame(() => {
       analyser = AudioContextObject.getAnalyser();
+      if (analyser == null) {
+        console.log("VISUALIZER: WARN: attempt to visualize with undefined analyzer");
+        return;
+      }
       analyser.getByteFrequencyData(dataArray);
 
       canvasCtx.fillStyle = backgroundColor;
@@ -81,29 +110,32 @@ const Visualizer = {
       for (let i = 0; i < bufferLength; i++) {
         barHeight = dataArray[i];
 
-        // const rgb = self.hexToRgb(strokeColor);
-        // canvasCtx.fillStyle = `rgb(${barHeight+100},${rgb.g},${rgb.b})`;
         canvasCtx.fillStyle = strokeColor;
         canvasCtx.fillRect(x, height - barHeight / 2, barWidth, barHeight / 2);
 
         x += barWidth + 1;
       }
-    }
-
-    draw();
+    });
   },
 
-  visualizeFrequencyCircles({ canvasCtx, width, height, backgroundColor, strokeColor }: VisualizerParams) {
+  visualizeFrequencyCircles({ canvasCtx, width, height, backgroundColor, strokeColor }: VisualizationStyleProps) {
     let analyser = AudioContextObject.getAnalyser();
+    if (analyser == null) {
+      console.log("attempt to visualize with undefined analyzer");
+      return;
+    }
     analyser.fftSize = 32;
     const bufferLength = analyser.frequencyBinCount;
 
     const dataArray = new Uint8Array(bufferLength);
     canvasCtx.clearRect(0, 0, width, height);
 
-    function draw() {
-      requestAnimationFrame(draw);
+    requestAnimationFrame(() => {
       analyser = AudioContextObject.getAnalyser();
+      if (analyser == null) {
+        console.log("VISUALIZER: WARN: attempt to visualize with undefined analyzer");
+        return;
+      }
       analyser.getByteFrequencyData(dataArray);
       const reductionAmount = 3;
       const reducedDataArray = new Uint8Array(bufferLength / reductionAmount);
@@ -131,8 +163,7 @@ const Visualizer = {
         canvasCtx.arc(width / 2, height / 2, r, 0, 2 * Math.PI);
         canvasCtx.stroke();
       }
-    }
-    draw();
+    });
   },
 
   hexToRgb(hex: string) {
