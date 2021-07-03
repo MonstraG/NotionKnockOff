@@ -117,7 +117,7 @@ const Title = styled.span`
 const updateSlug = (url: string) => EditorStore.setSlug(url.replace("/posts/", ""));
 
 const refreshPages = () =>
-  fetch("/api/getPosts?fields=title&fields=date")
+  fetch("/api/posts/getPosts?fields=title&fields=date")
     .then((response) => response.json())
     .then((pages) => PostNavStore.setPages(pages.sort(byDate)));
 
@@ -141,7 +141,7 @@ const NavAside: FC = () => {
     }
 
     setLoading(true);
-    fetch(`/api/${url}${slug ? "?slug=" + slug : ""}`)
+    fetch(`/api/posts/${url}${slug ? "?slug=" + slug : ""}`)
       .then((response) => (response.ok ? response.text() : "/"))
       .then((slug) => {
         refreshPages();

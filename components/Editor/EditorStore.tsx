@@ -47,7 +47,7 @@ namespace EditorStore {
     //update title
     PostNavStore.updatePage(slug, resolveTitle(body));
     //save data
-    return await fetch(`/api/savePost?slug=${slug}`, { body, method: "PUT" });
+    return await fetch(`/api/posts/savePost?slug=${slug}`, { body, method: "PUT" });
   };
 
   export const throttledSave = throttle(save);
