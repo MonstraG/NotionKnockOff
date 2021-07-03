@@ -12,13 +12,14 @@ export const allFields: (keyof Post)[] = ["title", "date", "slug", "content"];
 export const byDate = <T extends { date: string }>(a: T, b: T) =>
   new Date(b.date).getTime() - new Date(a.date).getTime();
 
+const resolveTitlePredicate = (line: string): string[] | null => line.trim().match(/[\p{L}\p{M}\p{Nd} ]+/u);
+
 export const resolveTitle = (content: string): string => {
   const lines = content.split("\n");
   //https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s08.html
   // This regular expression limits input to letters and numbers from any language or script (AND ALSO SPACE)
-  const predicate = (line: string): string[] | null => line.trim().match(/[\p{L}\p{M}\p{Nd} ]+/u);
-  const header = findValue(lines, predicate);
-  //.length === 0 should not happen but safety first
+  const header = findValue(lines, resolveTitlePredicate);
+  //.length === 0 should not happen (match returns null in this case) but safety first
   if (header == null || header.length === 0) {
     return "Untitled";
   }

@@ -1,17 +1,15 @@
 import fs from "fs";
-import { join } from "path";
 import matter from "gray-matter";
 import { allFields, PostFields, Post, resolveTitle } from "./helpers";
 import { Api } from "~/lib/api";
+import combinePromises from "combine-promises";
 
-const directory = join(process.cwd(), "_posts");
-const extension = ".md";
+const PostApi = new Api("_posts", ".md");
 
-const PostApi = new Api(directory, extension);
+const getPostRaw = (slug: string): Promise<string> => fs.promises.readFile(PostApi.getItemPath(slug), "utf8");
 
-export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Post> => {
-  const fullPath = PostApi.getItemPath(slug);
-  return fs.promises.readFile(fullPath, "utf8").then((fileContents) => {
+export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Post> =>
+  getPostRaw(slug).then((fileContents) => {
     const { data, content } = matter(fileContents);
 
     // Ensure only the minimal needed data is exposed
@@ -35,7 +33,6 @@ export const getPostBySlug = (slug: string, fields: PostFields = allFields): Pro
 
     return items as Post;
   });
-};
 
 export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
   PostApi.getItemSlugs().then((slugs) => Promise.all(slugs.map((slug) => getPostBySlug(slug, fields))));
@@ -54,8 +51,10 @@ date: '${new Date().toISOString()}'
   return PostApi.saveItem(slug, attributes + content);
 };
 
-const getPostRaw = (slug: string): Promise<string> => fs.promises.readFile(PostApi.getItemPath(slug), "utf8");
-
-export const duplicatePost = async (slug: string): Promise<string> => getPostRaw(slug).then(createNewPost);
+export const duplicatePost = async (slug: string): Promise<string> =>
+  combinePromises({
+    newSlug: PostApi.getUniqueSlug(),
+    content: getPostRaw(slug)
+  }).then(({ newSlug, content }) => PostApi.saveItem(newSlug, content).then(() => newSlug));
 
 export const deletePost = async (slug: string): Promise<void> => PostApi.removeItem(slug);

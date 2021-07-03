@@ -1,12 +1,8 @@
-import { join } from "path";
 import { Api } from "~/lib/api";
 import { Blob } from "buffer";
 import combinePromises from "combine-promises";
 
-const directory = join(process.cwd(), "_recordings");
-const extension = ".webm";
-
-const RecordingApi = new Api(directory, extension);
+const RecordingApi = new Api("_recordings", ".webm");
 
 export const createNewRecording = (blob: Blob): Promise<void> =>
   combinePromises({
