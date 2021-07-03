@@ -20,17 +20,17 @@ export type MicMediaOptions = {
 
 export interface MicrophoneRecorderParams {
   onStart?: () => void;
-  onStop?: (blobData: RecordingData) => void;
+  onStop?: (recordingData: RecordingData) => void;
   onData?: (blob: Blob) => void;
-  onSave?: (blobData: RecordingData) => void;
+  onSave?: (recordingData: RecordingData) => void;
   mediaOptions: MicMediaOptions;
   soundOptions: MicSoundOptions;
 }
 
 export class MicrophoneRecorder {
   private onStart: (() => void) | undefined;
-  private onStop: ((blobData: RecordingData) => void) | undefined;
-  private onSave: ((blobData: RecordingData) => void) | undefined;
+  private onStop: ((recordingData: RecordingData) => void) | undefined;
+  private onSave: ((recordingData: RecordingData) => void) | undefined;
   private onData: ((blob: Blob) => void) | undefined;
   private mediaOptions: MicMediaOptions;
   private constraints: {
@@ -142,7 +142,6 @@ export class MicrophoneRecorder {
       mediaRecorder = null;
       AudioContextObject.resetAnalyser();
       this.onStopRecording();
-      this.recording = false;
     }
   }
 
@@ -160,10 +159,11 @@ export class MicrophoneRecorder {
 
     this.onStop && this.onStop(blobObject);
     this.onSave && this.onSave(blobObject);
+    this.recording = false;
   }
 }
 
-type RecordingData = {
+export type RecordingData = {
   blob: Blob;
   startTime: number;
   stopTime: number;

@@ -1,22 +1,38 @@
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 import ReactMic from "~/components/Mic/ReactMic";
-import { Button } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
+import { RecordingData } from "~/components/Mic/lib/MicrophoneRecorder";
 
 const ActualMic: FC = () => {
   const [record, setRecord] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const toggleRecord = () => setRecord((prev) => !prev);
+  const playerRef = useRef<HTMLAudioElement | null>(null);
+
+  const storeRecording = (recordingData: RecordingData) => {
+    setLoading(true);
+    if (playerRef.current) {
+      playerRef.current.src = recordingData.blobURL;
+      playerRef.current?.play();
+    }
+
+    fetch(`/api/recordings/newRecording`, {
+      body: recordingData.blob,
+      method: "POST"
+    }).finally(() => setLoading(false));
+  };
 
   return (
     <>
       <Button onClick={toggleRecord} variant="contained">
-        {record ? "Stop recording" : "Start recording"}
+        {loading ? <CircularProgress /> : record ? "Stop recording" : "Start recording"}
       </Button>
       <ReactMic
         record={record}
         recorderParams={{
           mediaOptions: {
             audioBitsPerSecond: 128000,
-            mimeType: "audio/webm;codecs=opus"
+            mimeType: "audio/ogg;codecs:opus"
           },
           soundOptions: {
             echoCancellation: false,
@@ -24,12 +40,12 @@ const ActualMic: FC = () => {
             noiseSuppression: false,
             channelCount: 2
           },
-          // onData: (blob) => console.log("blob", blob),
-          onSave: (blobData) => console.log("Save blobData", blobData),
+          onSave: storeRecording,
           onStop: (blobData) => console.log("Stop blobData", blobData),
           onStart: () => console.log("start")
         }}
       />
+      <audio controls ref={playerRef} />
     </>
   );
 };
