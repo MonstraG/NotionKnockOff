@@ -5,30 +5,25 @@
 // http://stackoverflow.com/questions/22312841/waveshaper-node-in-webaudio-how-to-emulate-distortion
 
 import { createRef, FC, useEffect, useState } from "react";
-import AudioPlayer from "../libs/AudioPlayer";
-import Visualizer from "../libs/Visualizer";
-import { MicrophoneRecorder } from "~/components/Mic/MicrophoneRecorder";
+import { MicrophoneRecorder, MicrophoneRecorderParams } from "~/components/Mic/lib/MicrophoneRecorder";
+import AudioPlayer from "~/components/Mic/lib/AudioPlayer";
+import Visualizer from "~/components/Mic/lib/Visualizer";
 
 type VisualType = "sinewave" | "frequencyBars" | "frequencyCircles";
 
 type Props = {
+  record: boolean;
+
   backgroundColor?: string;
   strokeColor?: string;
   className?: string;
-  audioBitsPerSecond?: number;
-  mimeType?: string;
+
   width?: number;
   height?: number;
-  record: boolean;
-  visualSetting: VisualType;
-  echoCancellation: boolean;
-  autoGainControl: boolean;
-  noiseSuppression: boolean;
-  onStart?: () => void;
-  onStop?: () => void;
-  onData?: () => void;
-  onSave?: () => void;
-  audioElem: any;
+  visualSetting?: VisualType;
+
+  recorderParams?: MicrophoneRecorderParams;
+  audioElem?: HTMLMediaElement;
 };
 
 type MicState = {
@@ -41,86 +36,79 @@ const Mic: FC<Props> = ({
   backgroundColor = "rgba(255, 255, 255, 0.5)",
   strokeColor = "#000000",
   className = "visualizer",
-  audioBitsPerSecond = 128000,
-  mimeType = "audio/webm;codecs=opus",
+  recorderParams = {
+    mediaOptions: {
+      audioBitsPerSecond: 128000,
+      mimeType: "audio/webm;codecs=opus"
+    },
+    soundOptions: {
+      echoCancellation: false,
+      autoGainControl: false,
+      noiseSuppression: false,
+      channelCount: 2
+    }
+  },
   record = false,
   width = 640,
   height = 100,
   visualSetting = "sinewave",
-  echoCancellation = false,
-  autoGainControl = false,
-  noiseSuppression = false,
-  audioElem,
-  onStart,
-  onStop,
-  onData,
-  onSave
+  audioElem
 }) => {
   const visualizerRef = createRef<HTMLCanvasElement>();
+  const [recorder, setRecorder] = useState<MicrophoneRecorder>(new MicrophoneRecorder(recorderParams));
+  useEffect(() => {
+    setRecorder(new MicrophoneRecorder(recorderParams));
+  }, [recorderParams]);
   const [state, setState] = useState<MicState>({
     microphoneRecorder: null,
     canvas: null,
     canvasCtx: null
   });
 
-  const visualize = () => {
-    if (visualSetting === "sinewave") {
-      Visualizer.visualizeSineWave(state.canvasCtx, state.canvas, width, height, backgroundColor, strokeColor);
-    } else if (visualSetting === "frequencyBars") {
-      Visualizer.visualizeFrequencyBars(state.canvasCtx, state.canvas, width, height, backgroundColor, strokeColor);
-    } else if (visualSetting === "frequencyCircles") {
-      Visualizer.visualizeFrequencyCircles(state.canvasCtx, state.canvas, width, height, backgroundColor, strokeColor);
-    }
-  };
-
   useEffect(() => {
-    if (state.microphoneRecorder) {
+    if (recorder) {
       if (record) {
-        state.microphoneRecorder.startRecording();
+        recorder.startRecording();
         return;
       }
 
-      state.microphoneRecorder.stopRecording(onStop);
+      recorder.stopRecording();
       state.canvasCtx?.clearRect(0, 0, width, height);
     }
-  }, [record]);
+  }, [state.canvasCtx, recorder, record, width, height]);
 
   useEffect(() => {
     if (visualizerRef.current) {
-      const canvas = visualizerRef.current;
-      const canvasCtx = canvas?.getContext("2d");
-
       if (audioElem) {
         AudioPlayer.create(audioElem);
-
-        setState({
-          canvas,
-          canvasCtx
-        });
-      } else {
-        const options = {
-          audioBitsPerSecond,
-          mimeType
-        };
-        const soundOptions = {
-          echoCancellation,
-          autoGainControl,
-          noiseSuppression
-        };
-        setState({
-          microphoneRecorder: new MicrophoneRecorder(onStart, onStop, onSave, onData, options, soundOptions),
-          canvas,
-          canvasCtx
-        });
       }
+      const canvas = visualizerRef.current;
+      setState({
+        canvas,
+        canvasCtx: canvas?.getContext("2d")
+      });
     }
-  }, [visualizerRef]);
+  }, [audioElem, visualizerRef]);
 
   useEffect(() => {
     if (state.canvas != null) {
-      visualize();
+      const params = {
+        canvasCtx: state.canvasCtx,
+        canvas: state.canvas,
+        width: width,
+        height: height,
+        backgroundColor: backgroundColor,
+        strokeColor: strokeColor
+      };
+      if (visualSetting === "sinewave") {
+        Visualizer.visualizeSineWave(params);
+      } else if (visualSetting === "frequencyBars") {
+        Visualizer.visualizeFrequencyBars(params);
+      } else if (visualSetting === "frequencyCircles") {
+        Visualizer.visualizeFrequencyCircles(params);
+      }
     }
-  }, [state]);
+  }, [backgroundColor, height, state, strokeColor, visualSetting, width]);
 
   return <canvas ref={visualizerRef} height={height} width={width} className={className} />;
 };
