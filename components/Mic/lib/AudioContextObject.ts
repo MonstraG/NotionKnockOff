@@ -1,7 +1,3 @@
-let audioCtx: AudioContext | null = null;
-if (typeof window !== "undefined") {
-  audioCtx = new window.AudioContext();
-}
 let analyser: AnalyserNode | undefined = audioCtx?.createAnalyser();
 
 const AudioContextObject = {

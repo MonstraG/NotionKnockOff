@@ -1,11 +1,3 @@
-import AudioContextObject from "~/components/Mic/lib/AudioContextObject";
-
-let analyser: AnalyserNode | undefined;
-let audioCtx: AudioContext | null;
-let mediaRecorder: MediaRecorder | null;
-let chunks: BlobPart[] = [];
-let stream: MediaStream;
-
 export type MicSoundOptions = {
   echoCancellation: boolean;
   autoGainControl: boolean;
@@ -28,17 +20,21 @@ export interface MicrophoneRecorderParams {
 }
 
 export class MicrophoneRecorder {
-  private onStart: (() => void) | undefined;
-  private onStop: ((recordingData: RecordingData) => void) | undefined;
-  private onSave: ((recordingData: RecordingData) => void) | undefined;
-  private onData: ((blob: Blob) => void) | undefined;
-  private mediaOptions: MicMediaOptions;
+  private readonly onStart: (() => void) | undefined;
+  private readonly onStop: ((recordingData: RecordingData) => void) | undefined;
+  private readonly onSave: ((recordingData: RecordingData) => void) | undefined;
+  private readonly onData: ((blob: Blob) => void) | undefined;
+  private readonly mediaOptions: MicMediaOptions;
   private constraints: {
     audio: MicSoundOptions;
     video: false;
   };
   private startTime: number = 0;
-  public recording: boolean = false;
+  private readonly audioContext: AudioContext | null = null;
+  private readonly analyzer: AnalyserNode | null = null;
+  private chunks: BlobPart[] = [];
+  private mediaRecorder: MediaRecorder | null = null;
+  private stream: MediaStream | null = null;
 
   constructor({ onStart, onStop, onSave, onData, mediaOptions, soundOptions }: MicrophoneRecorderParams) {
     this.onStart = onStart;
@@ -50,77 +46,45 @@ export class MicrophoneRecorder {
       audio: soundOptions,
       video: false
     };
+    if (typeof window != "undefined") {
+      this.audioContext = new window.AudioContext();
+      this.analyzer = this.audioContext.createAnalyser();
+    }
   }
 
+  // todo: put start recording into constructor.
   startRecording = () => {
-    if (this.recording) {
+    if (this.audioContext == null) {
+      console.warn("Attempt to record audio without audio context");
+      return;
+    }
+    if (this.startTime != 0) {
+      console.warn("Attempt to record audio while already recording");
       return;
     }
     this.startTime = Date.now();
-    this.recording = true;
-    console.log("STARTED");
 
-    //if mediaRecorder set up
-    if (mediaRecorder) {
-      if (audioCtx && audioCtx.state === "suspended") {
-        audioCtx.resume();
-      }
-
-      if (mediaRecorder && mediaRecorder.state === "paused") {
-        mediaRecorder.resume();
-        return;
-      }
-
-      if (audioCtx && mediaRecorder && mediaRecorder.state === "inactive") {
-        if (analyser == null) {
-          console.log("RECORDER WARN: attempt to do something else with undefined analyzer");
-          return;
-        }
-
-        mediaRecorder.start(10);
-        audioCtx.createMediaStreamSource(stream).connect(analyser);
-
-        this.onStart && this.onStart();
-      }
-
-      console.log("RECORDER: CONTINUED");
-
-      return;
-    }
-
-    //set it up otherwise
     if (navigator.mediaDevices) {
-      console.log("RECORDER: getUserMedia supported.");
+      navigator.mediaDevices.getUserMedia(this.constraints).then((stream) => {
+        //todo: technically speaking, there should be just one stream, test it
 
-      navigator.mediaDevices.getUserMedia(this.constraints).then((str) => {
-        stream = str;
-
+        let mediaRecorder: MediaRecorder;
         if (MediaRecorder.isTypeSupported(this.mediaOptions.mimeType)) {
-          mediaRecorder = new MediaRecorder(str, this.mediaOptions);
+          mediaRecorder = new MediaRecorder(stream, this.mediaOptions);
         } else {
-          mediaRecorder = new MediaRecorder(str);
+          mediaRecorder = new MediaRecorder(stream);
         }
+
         this.onStart && this.onStart();
 
         mediaRecorder.ondataavailable = (event: BlobEvent) => {
-          chunks.push(event.data);
+          this.chunks.push(event.data);
           this.onData && this.onData(event.data);
         };
 
-        audioCtx = AudioContextObject.getAudioContext();
-        if (audioCtx == null) {
-          console.log("RECORDER WARN: attempt to start recording with null audioCtx");
-          return;
-        }
-
-        audioCtx.resume().then(() => {
-          analyser = AudioContextObject.getAnalyser();
-          if (analyser == null) {
-            console.log("RECORDER WARN: attempt to resume context with undefined analyzer");
-            return;
-          }
+        this.audioContext?.resume().then(() => {
           mediaRecorder?.start(10);
-          audioCtx?.createMediaStreamSource(stream).connect(analyser);
+          this.audioContext?.createMediaStreamSource(stream).connect(this.analyzer);
         });
       });
 
@@ -132,22 +96,9 @@ export class MicrophoneRecorder {
   };
 
   stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== "inactive") {
-      console.log("RECORDER: STOPPED");
-      mediaRecorder.stop();
-
-      stream.getAudioTracks().forEach((track: MediaStreamTrack) => {
-        track.stop();
-      });
-      mediaRecorder = null;
-      AudioContextObject.resetAnalyser();
-      this.onStopRecording();
-    }
-  }
-
-  onStopRecording() {
-    const blob = new Blob(chunks, { type: this.mediaOptions.mimeType });
-    chunks = [];
+    this.mediaRecorder?.stop();
+    this.stream?.getAudioTracks().forEach((track: MediaStreamTrack) => track.stop());
+    const blob = new Blob(this.chunks, { type: this.mediaOptions.mimeType });
 
     const blobObject = {
       blob,
@@ -159,7 +110,6 @@ export class MicrophoneRecorder {
 
     this.onStop && this.onStop(blobObject);
     this.onSave && this.onSave(blobObject);
-    this.recording = false;
   }
 }
 
