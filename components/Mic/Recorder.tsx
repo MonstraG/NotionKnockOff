@@ -11,7 +11,7 @@ const Recorder: FC = () => {
       setRecord((prev) => !prev);
     }
   };
-  const [audioSrc, setAudioSrc] = useState<string>("");
+  const [audioSrc, setAudioSrc] = useState<string | undefined>(undefined);
 
   const storeRecording = (recordingData: RecordingData) => {
     setLoading(true);
@@ -26,7 +26,7 @@ const Recorder: FC = () => {
   return (
     <>
       <Button onClick={toggleRecord} variant="contained">
-        {loading ? <CircularProgress size={"24px"} /> : record ? "Stop recording" : "Start recording"}
+        {loading ? <CircularProgress size="24px" /> : record ? "Stop recording" : "Start recording"}
       </Button>
       <ReactMic
         record={record}
@@ -37,7 +37,7 @@ const Recorder: FC = () => {
           },
           soundOptions: {
             echoCancellation: false,
-            autoGainControl: false,
+            autoGainControl: true,
             noiseSuppression: false,
             channelCount: 2
           },

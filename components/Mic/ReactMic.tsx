@@ -38,7 +38,7 @@ const Mic: FC<Props> = ({
     height: 100,
     backgroundColor: "rgba(255, 255, 255, 0.5)",
     strokeColor: "#000000",
-    visualizationType: "sinewave"
+    visualizationType: "frequencyBars"
   },
   record = false,
   audioElem
