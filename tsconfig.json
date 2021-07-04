@@ -23,6 +23,7 @@
     "preserveConstEnums": true,
     "removeComments": true,
     "resolveJsonModule": true,
+    "incremental": true,
     "skipLibCheck": true,
     "sourceMap": true,
   },

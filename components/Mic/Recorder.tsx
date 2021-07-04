@@ -1,20 +1,21 @@
-import { FC, useRef, useState } from "react";
+import { FC, useState } from "react";
 import ReactMic from "~/components/Mic/ReactMic";
 import { Button, CircularProgress } from "@material-ui/core";
 import { RecordingData } from "~/components/Mic/lib/MicrophoneRecorder";
 
-const ActualMic: FC = () => {
+const Recorder: FC = () => {
   const [record, setRecord] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const toggleRecord = () => setRecord((prev) => !prev);
-  const playerRef = useRef<HTMLAudioElement | null>(null);
+  const toggleRecord = () => {
+    if (!loading) {
+      setRecord((prev) => !prev);
+    }
+  };
+  const [audioSrc, setAudioSrc] = useState<string>("");
 
   const storeRecording = (recordingData: RecordingData) => {
     setLoading(true);
-    if (playerRef.current) {
-      playerRef.current.src = recordingData.blobURL;
-      playerRef.current?.play();
-    }
+    setAudioSrc(recordingData.blobURL);
 
     fetch(`/api/recordings/newRecording`, {
       body: recordingData.blob,
@@ -25,7 +26,7 @@ const ActualMic: FC = () => {
   return (
     <>
       <Button onClick={toggleRecord} variant="contained">
-        {loading ? <CircularProgress /> : record ? "Stop recording" : "Start recording"}
+        {loading ? <CircularProgress size={"24px"} /> : record ? "Stop recording" : "Start recording"}
       </Button>
       <ReactMic
         record={record}
@@ -40,14 +41,12 @@ const ActualMic: FC = () => {
             noiseSuppression: false,
             channelCount: 2
           },
-          onSave: storeRecording,
-          onStop: (blobData) => console.log("Stop blobData", blobData),
-          onStart: () => console.log("start")
+          onSave: storeRecording
         }}
       />
-      <audio controls ref={playerRef} />
+      <audio controls={Boolean(audioSrc)} src={audioSrc} />
     </>
   );
 };
 
-export default ActualMic;
+export default Recorder;

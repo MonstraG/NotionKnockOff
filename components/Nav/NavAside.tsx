@@ -6,7 +6,7 @@ import EditorStore from "~/components/Editor/EditorStore";
 import { useRouter } from "next/router";
 import { byDate } from "~/lib/helpers";
 import PostList from "~/components/Nav/PostList";
-import ActualMic from "~/components/Mic/ActualMic";
+import Recorder from "~/components/Mic/Recorder";
 
 export const StyledAside = styled.aside`
   width: 250px;
@@ -69,7 +69,7 @@ const NavAside: FC = () => {
         <>
           <PostList posts={posts} postAction={postAction} />
           <hr />
-          <ActualMic />
+          <Recorder />
         </>
       )}
     </StyledAside>
