@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { duplicatePost } from "~/lib/postApi";
+import { sendOk } from "~/lib/requests";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const newSlug = await duplicatePost(req.query.slug.toString());
-  res.status(200).send(newSlug);
+  sendOk(res, await duplicatePost(req.query.slug.toString()));
 }

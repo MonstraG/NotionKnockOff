@@ -8,7 +8,7 @@ const PostApi = new Api("_posts", ".md");
 
 const getPostRaw = (slug: string): Promise<string> => fs.promises.readFile(PostApi.getItemPath(slug), "utf8");
 
-export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Partial<Post>> =>
+export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Post> =>
   getPostRaw(slug).then((fileContents) => {
     const { data, content } = matter(fileContents);
 
@@ -23,10 +23,10 @@ export const getPostBySlug = (slug: string, fields: PostFields = allFields): Pro
       }
     });
 
-    return items;
+    return items as Post;
   });
 
-export const getAllPosts = (fields: PostFields = []): Promise<Partial<Post>[]> =>
+export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
   PostApi.getItemSlugs().then((slugs) => Promise.all(slugs.map((slug) => getPostBySlug(slug, fields))));
 
 export const createNewPost = async (content: string = ""): Promise<string> => {

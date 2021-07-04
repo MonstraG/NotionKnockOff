@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getAllPosts } from "~/lib/postApi";
 import { PostFields } from "~/lib/helpers";
+import { sendOk } from "~/lib/requests";
 
 const resolveRequiredFields = (req: NextApiRequest): PostFields => {
   if (typeof req.query.fields === "string") {
@@ -14,6 +15,5 @@ const resolveRequiredFields = (req: NextApiRequest): PostFields => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const posts = await getAllPosts(resolveRequiredFields(req));
-  res.status(200).send(posts);
+  sendOk(res, await getAllPosts(resolveRequiredFields(req)));
 }

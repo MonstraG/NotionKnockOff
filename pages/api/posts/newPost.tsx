@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { createNewPost } from "~/lib/postApi";
+import { sendOk } from "~/lib/requests";
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
-  const newSlug = await createNewPost();
-  res.status(200).send(newSlug);
+  sendOk(res, await createNewPost());
 }
