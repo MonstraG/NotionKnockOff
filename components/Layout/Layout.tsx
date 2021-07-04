@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
 import { Spinner } from "~/components/Common/Spinner";
-import useLoadingOnNavigation from "~/components/Common/useLoadingOnNavigation";
+import useLoadingOnNavigation from "~/components/]/useLoadingOnNavigation";
 import { MobileContextProvider } from "~/components/Common/MobileContext/MobileContext";
 import Nav from "~/components/Nav/Nav";
 

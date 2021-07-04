@@ -2,15 +2,18 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { getAllPosts } from "~/lib/postApi";
 import { PostFields } from "~/lib/helpers";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  let fields = ["slug"]; //always include slug
+const resolveRequiredFields = (req: NextApiRequest): PostFields => {
   if (typeof req.query.fields === "string") {
-    fields.push(req.query.fields);
+    return [req.query.fields] as PostFields;
   }
   if (typeof req.query.fields === "object") {
     //string[]
-    fields.push(...req.query.fields);
+    return req.query.fields as PostFields;
   }
-  const posts = await getAllPosts(fields as PostFields);
+  return [];
+};
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const posts = await getAllPosts(resolveRequiredFields(req));
   res.status(200).send(posts);
 }

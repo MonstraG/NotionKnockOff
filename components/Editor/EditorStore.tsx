@@ -45,7 +45,7 @@ namespace EditorStore {
 
   const saveToFile = async (slug: string, body: string) => {
     //update title
-    PostNavStore.updatePage(slug, resolveTitle(body));
+    PostNavStore.updatePost(slug, resolveTitle(body));
     //save data
     return await fetch(`/api/posts/savePost?slug=${slug}`, { body, method: "PUT" });
   };

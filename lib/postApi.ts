@@ -8,33 +8,25 @@ const PostApi = new Api("_posts", ".md");
 
 const getPostRaw = (slug: string): Promise<string> => fs.promises.readFile(PostApi.getItemPath(slug), "utf8");
 
-export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Post> =>
+export const getPostBySlug = (slug: string, fields: PostFields = allFields): Promise<Partial<Post>> =>
   getPostRaw(slug).then((fileContents) => {
     const { data, content } = matter(fileContents);
 
     // Ensure only the minimal needed data is exposed
-    const items: Partial<Post> = {};
+    const items: Partial<Post> = { slug };
     fields.forEach((field) => {
-      if (field === "slug") {
-        items[field] = slug;
-      }
       if (field === "content") {
         items[field] = content;
       }
-
-      if (field === "content") {
-        items[field] = content;
-      }
-
       if (data[field]) {
         items[field] = data[field];
       }
     });
 
-    return items as Post;
+    return items;
   });
 
-export const getAllPosts = (fields: PostFields = []): Promise<Post[]> =>
+export const getAllPosts = (fields: PostFields = []): Promise<Partial<Post>[]> =>
   PostApi.getItemSlugs().then((slugs) => Promise.all(slugs.map((slug) => getPostBySlug(slug, fields))));
 
 export const createNewPost = async (content: string = ""): Promise<string> => {

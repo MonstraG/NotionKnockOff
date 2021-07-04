@@ -2,7 +2,7 @@ import { AppProps } from "next/app";
 import Head from "next/head";
 import "modern-normalize";
 import { FC } from "react";
-import Layout from "~/components/Common/Layout";
+import Layout from "~/components/Layout/Layout";
 import { ThemeProvider } from "styled-components";
 import { StylesProvider } from "@material-ui/core";
 

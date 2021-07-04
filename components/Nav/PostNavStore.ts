@@ -10,11 +10,11 @@ namespace PostNavStore {
     posts: null
   }));
 
-  export const pages = (state: PostNavState) => state.posts;
-  export const setPages = (pages: Post[]) => useStore.setState({ posts: pages });
+  export const posts = ({ posts }: PostNavState) => posts;
+  export const setPosts = (posts: Post[]) => useStore.setState({ posts });
 
   //replaces title, reorders to the top
-  export const updatePage = (slug: string, title: string) => {
+  export const updatePost = (slug: string, title: string) => {
     const { posts } = useStore.getState();
     if (posts == null) {
       return;
@@ -24,7 +24,7 @@ namespace PostNavStore {
       return; //updated post no longer exists?
     }
     updated.title = title;
-    setPages([updated, ...posts.filter((p) => p.slug !== slug)]);
+    setPosts([updated, ...posts.filter((p) => p.slug !== slug)]);
   };
 }
 
