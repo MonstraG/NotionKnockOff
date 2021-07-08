@@ -31,6 +31,5 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "node_modules/@types/dom-mediacapture-record/index.d.ts"
   ]
 }
