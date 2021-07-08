@@ -6,8 +6,7 @@
     "lib": ["dom"],
     "baseUrl": ".",
     "paths": {
-      "~/components/*": ["components/*"],
-      "~/lib/*": ["lib/*"]
+      "~/*": ["./*"]
     },
     "moduleResolution": "node",
     "strict": true,
