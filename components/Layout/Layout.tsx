@@ -4,6 +4,7 @@ import { Spinner } from "~/components/Common/Spinner";
 import useLoadingOnNavigation from "~/components/Layout/useLoadingOnNavigation";
 import { MobileContextProvider } from "~/components/Common/MobileContext/MobileContext";
 import Nav from "~/components/Nav/Nav";
+import CreateFab from "~/components/Layout/CreateFab";
 
 const Main = styled.main`
   display: flex;
@@ -55,6 +56,7 @@ const Layout: FC = ({ children }) => {
       <MobileContextProvider>
         <Nav />
         <PageBody>{loading ? <Spinner /> : children}</PageBody>
+        <CreateFab />
       </MobileContextProvider>
     </Main>
   );
